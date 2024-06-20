@@ -12,4 +12,5 @@ restoranRouter.route("/getReservationsLast24Hours").get((req, res) => restoranCo
 restoranRouter.route("/getReservationsLast7Days").get((req, res) => restoranController.getReservationsLast7Days(req, res));
 restoranRouter.route("/getReservationsLastMonth").get((req, res) => restoranController.getReservationsLastMonth(req, res));
 restoranRouter.route("/getAllRestorani").get((req, res) => restoranController.getAllRestorani(req, res));
+restoranRouter.route("/getAllRestoraniWithRatings").get((req, res) => restoranController.getAllRestoraniWithRatings(req, res));
 exports.default = restoranRouter;

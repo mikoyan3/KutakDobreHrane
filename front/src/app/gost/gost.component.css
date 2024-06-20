@@ -132,3 +132,59 @@ header h1 {
         margin: 5px;
     }
 }
+
+.stars {
+    color: gold;
+    display: inline-block;
+}
+
+.restaurant-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; 
+}
+
+.restaurant-list table, .restaurant-list th, .restaurant-list td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+.restaurant-list th {
+    background-color: #8561a8;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px; 
+}
+
+.restaurant-list th:hover {
+    background-color: #64427a; 
+}
+
+.restaurant-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.search input {
+    padding: 10px;
+    margin-right: 10px;
+    width: calc(33% - 10px); 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.search button {
+    margin-top: 10px;
+    padding: 10px;
+    background: #8561a8;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px; 
+    text-align: center;
+}
+
+.search button:hover {
+    background: #64427a; 
+}

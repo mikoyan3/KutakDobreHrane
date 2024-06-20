@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { gost } from '../models/gost';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { UserService } from '../services/user.service';
+import { RestoranService } from '../services/restoran.service';
 
 @Component({
   selector: 'app-gost',
@@ -22,8 +23,15 @@ export class GostComponent implements OnInit{
   successMessage: string = ""
   flagProfil: boolean = true;
   flagRestoran: boolean = false;
+  restorani = [];
+  konobari = [];
+  filteredRestorani = [];
+  searchNaziv = '';
+  searchAdresa = '';
+  searchTip = '';
+  sortDirection = 'asc';
 
-  constructor(private userService: UserService, private sanitizer: DomSanitizer){}
+  constructor(private userService: UserService, private sanitizer: DomSanitizer, private restoranService: RestoranService){}
 
   ngOnInit(): void {
     this.errorMessage = "";
@@ -40,6 +48,13 @@ export class GostComponent implements OnInit{
       const blob = new Blob([data]);
       const url = URL.createObjectURL(blob);
       this.fileDownloaded = this.sanitizer.bypassSecurityTrustUrl(url);
+      this.restoranService.getAllRestoraniWithRatings().subscribe(res=>{
+        this.restorani = res;
+        this.filteredRestorani = this.restorani;
+        this.userService.getAllKonobari().subscribe(kon=>{
+          this.konobari = kon;
+        })
+      })
     })
   }
 
@@ -97,10 +112,33 @@ export class GostComponent implements OnInit{
     this.flagRestoran = false;
   }
 
-  restorani(){
+  restoraniShow(){
     this.flagProfil = false;
     this.flagRestoran = true;
   }
   rezervacije(){}
   dostavaHrane(){}
+
+  search() {
+    this.filteredRestorani = this.restorani.filter(r =>
+      r.naziv.toLowerCase().includes(this.searchNaziv.toLowerCase()) && r.adresa.toLowerCase().includes(this.searchAdresa.toLowerCase()) && r.tip.toLowerCase().includes(this.searchTip.toLowerCase())
+    );
+  }
+
+  sort(column: string) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    this.filteredRestorani.sort((a, b) => {
+      if (a[column] < b[column]) return this.sortDirection === 'asc' ? -1 : 1;
+      if (a[column] > b[column]) return this.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
+
+  getKonobariForRestoran(restoran: any): any[] {
+    return this.konobari.filter(konobar => konobar.restoran === restoran.naziv);
+  }
+
+  getStars(rating: number): number[] {
+    return Array(Math.round(rating)).fill(0).map((x, i) => i);
+  }
 }

@@ -3,7 +3,7 @@
         <h1>Dobrodošli u sistem restorana</h1>
         <div class="buttons">
             <button (click)="profil()">Profil</button>
-            <button (click)="restorani()">Restorani</button>
+            <button (click)="restoraniShow()">Restorani</button>
             <button (click)="rezervacije()">Rezervacije</button>
             <button (click)="dostavaHrane()">Dostava hrane</button>
         </div>
@@ -48,7 +48,47 @@
             </div>
         </div>
     </section>
-    <section *ngIf="flagRestoran == true">
-        
-    </section>
+  <section *ngIf="flagRestoran == true" class="search">
+    <h2>Pretraži restorane</h2>
+    <input type="text" placeholder="Naziv" [(ngModel)]="searchNaziv">
+    <input type="text" placeholder="Adresa" [(ngModel)]="searchAdresa">
+    <input type="text" placeholder="Tip restorana" [(ngModel)]="searchTip">
+    <button (click)="search()">Pretraži</button>
+  </section>
+  <section class="restaurant-list" *ngIf="flagRestoran == true">
+    <h2>Lista restorana</h2>
+    <table>
+      <thead>
+        <tr>
+          <th (click)="sort('naziv')">Naziv</th>
+          <th (click)="sort('adresa')">Adresa</th>
+          <th (click)="sort('tip')">Tip restorana</th>
+          <th (click)="sort('avgRating')">Prosečna ocena</th>
+          <th>Konobari</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let restoran of filteredRestorani">
+          <td>{{ restoran.naziv }}</td>
+          <td>{{ restoran.adresa }}</td>
+          <td>{{ restoran.tip }}</td>
+          <td>
+            {{ restoran.avgRating | number: '1.1-1' }}
+            <span class="stars">
+              <ng-container *ngFor="let star of getStars(restoran.avgRating)">
+                &#9733;
+              </ng-container>
+            </span>
+          </td>
+          <td>
+            <ul>
+              <li *ngFor="let konobar of getKonobariForRestoran(restoran)">
+                {{ konobar.name }} {{ konobar.surname }}
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 </div>

@@ -29,4 +29,8 @@ export class RestoranService {
   getAllRestorani(){
     return this.http.get<restoran[]>("http://localhost:4000/restoran/getAllRestorani")
   }
+
+  getAllRestoraniWithRatings(): Observable<any>{
+    return this.http.get("http://localhost:4000/restoran/getAllRestoraniWithRatings")
+  }
 }

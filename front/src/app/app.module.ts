@@ -13,6 +13,7 @@ import { AdminComponent } from './admin/admin.component';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { RegisterGostComponent } from './register-gost/register-gost.component';
 import { LozinkaComponent } from './lozinka/lozinka.component';
+import { RestoranComponent } from './restoran/restoran.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { LozinkaComponent } from './lozinka/lozinka.component';
     AdminComponent,
     LoginAdminComponent,
     RegisterGostComponent,
-    LozinkaComponent
+    LozinkaComponent,
+    RestoranComponent
   ],
   imports: [
     BrowserModule,

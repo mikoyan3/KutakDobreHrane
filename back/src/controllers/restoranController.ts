@@ -8,6 +8,7 @@ import Admin from "../models/admin"
 import gost from "../models/gost";
 import Restoran from "../models/restoran"
 import Rezervacija from "../models/rezervacija"
+import Recenzija from "../models/recenzija"
 const bcrypt = require('bcrypt');
 
 export class RestoranController{
@@ -71,5 +72,38 @@ export class RestoranController{
         }).catch(err=>{
             console.log(err);
         })
+    }
+
+    getAllRestoraniWithRatings = async (req, res) => {
+        try{
+            const ratings = await Recenzija.aggregate([{
+                $group: {
+                    _id: "$restoran",
+                    avgRating: {$avg: "$ocena"}
+                }
+            }]);
+
+            const ratingsMap = {};
+            ratings.forEach(rating => {
+            ratingsMap[rating._id] = rating.avgRating;
+            });
+
+            
+            const restorani = await Restoran.find();
+
+            
+            const restoraniWithRatings = restorani.map(restoran => {
+            const restoranObject = restoran.toObject();
+            return {
+                ...restoranObject,
+                avgRating: ratingsMap[restoran.naziv] || 0
+            };
+            });
+
+            
+            res.json(restoraniWithRatings);
+        } catch (err){
+            console.log(err);
+        }
     }
 }
