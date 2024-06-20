@@ -30,5 +30,8 @@ userRouter.route("/dohvatanjeKorisnikaNaOsnovuUsername").post(userController.doh
 userRouter.route("/novaLozinka").post(userController.novaLozinka);
 userRouter.route("/getNumberOfRegisteredGost").get((req,res)=>userController.getNumberOfRegisteredGost(req,res));
 userRouter.route("/getAllKonobari").get((req,res)=>userController.getAllKonobari(req,res));
+userRouter.route("/getFileGost").post((req,res)=>userController.getFileGost(req, res));
+userRouter.route("/updateProfileGost/:username").put((req,res)=>userController.updateProfileGost(req, res));
+userRouter.route("/updatePictureGost").post(upload.single('file'), userController.updatePictureGost);
 
 export default userRouter;

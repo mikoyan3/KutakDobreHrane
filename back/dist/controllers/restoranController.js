@@ -22,15 +22,17 @@ class RestoranController {
             switch (timeFrame) {
                 case '24h':
                     startDate = new Date();
-                    startDate.setHours(startDate.getHours() - 24);
+                    startDate.setHours(startDate.getHours() - 22);
                     break;
                 case '7d':
                     startDate = new Date();
                     startDate.setDate(startDate.getDate() - 7);
+                    startDate.setHours(startDate.getHours() + 2);
                     break;
                 case '1m':
                     startDate = new Date();
                     startDate.setMonth(startDate.getMonth() - 1);
+                    startDate.setHours(startDate.getHours() + 2);
                     break;
                 default:
                     res.json({ error: 'Invalid time frame' });
@@ -42,7 +44,6 @@ class RestoranController {
                     if (rez.datum >= startDate)
                         cnt++;
                 });
-                console.log(cnt);
                 res.json({ count: cnt });
             });
         };

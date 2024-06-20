@@ -1,1 +1,54 @@
-<p>gost works!</p>
+<div class="container">
+    <header>
+        <h1>Dobrodošli u sistem restorana</h1>
+        <div class="buttons">
+            <button (click)="profil()">Profil</button>
+            <button (click)="restorani()">Restorani</button>
+            <button (click)="rezervacije()">Rezervacije</button>
+            <button (click)="dostavaHrane()">Dostava hrane</button>
+        </div>
+    </header>
+    <section class="profile" *ngIf="flagProfil == true">
+        <h2>Profil</h2>
+        <div class="profile-info">
+            <div class="profile-picture">
+                <img [src]="fileDownloaded" alt="Downloaded Image">
+                <input type="file" accept="image/*" (change)="onFileSelected($event)">
+                <span style="color: red">{{errorMessage}}</span>
+            </div>
+            <div class="profile-details">
+                <div class="input-field">
+                    <label for="ime">Ime:</label>
+                    <input type="text" id="ime" name="ime" [(ngModel)]="ime">
+                </div>
+                <div class="input-field">
+                    <label for="prezime">Prezime:</label>
+                    <input type="text" id="prezime" name="prezime" [(ngModel)]="prezime">
+                </div>
+                <div class="input-field">
+                    <label for="adresa">Adresa:</label>
+                    <input type="text" id="adresa" name="adresa" [(ngModel)]="adresa">
+                </div>
+                <div class="input-field">
+                    <label for="email">E-mail adresa:</label>
+                    <input type="email" id="email" name="email" [(ngModel)]="email">
+                </div>
+                <div class="input-field">
+                    <label for="telefon">Kontakt telefon:</label>
+                    <input type="tel" id="telefon" name="telefon" [(ngModel)]="telefon">
+                </div>
+                <div class="input-field">
+                    <label for="kreditna-kartica">Broj kreditne kartice:</label>
+                    <input type="text" id="kreditna-kartica" name="kreditna-kartica" [(ngModel)]="kreditnaKartica">
+                </div>
+                <div class="buttons">
+                    <button (click)="updateProfile()">Ažuriraj profil</button>
+                    <span style="color: green;">{{successMessage}}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section *ngIf="flagRestoran == true">
+        
+    </section>
+</div>

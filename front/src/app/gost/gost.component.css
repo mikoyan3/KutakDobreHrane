@@ -1,0 +1,134 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    background-color: #f7f7f7; 
+    padding: 20px; 
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    background: #8561a8;  
+    color: #fff;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: #64427a 3px solid; 
+}
+
+header h1 {
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.buttons button {
+    background: #8561a8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 4px; 
+}
+
+.buttons button:hover {
+    background: #64427a; 
+}
+
+.profile {
+    margin-top: 20px;
+}
+
+.profile h2 {
+    border-bottom: 2px solid #8561a8;
+    padding-bottom: 5px;
+    color: #8561a8;
+}
+
+.profile-info {
+    display: flex;
+    align-items: flex-start;
+}
+
+.profile-picture {
+    margin-right: 20px;
+}
+
+.profile-picture img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 50%;
+    border: 2px solid #8561a8;
+}
+
+.profile-details {
+    flex: 1;
+}
+
+.input-field {
+    margin-bottom: 15px;
+}
+
+.input-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.input-field input[type="text"],
+.input-field input[type="email"],
+.input-field input[type="tel"] {
+    width: calc(100% - 10px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.input-field input[type="file"] {
+    margin-top: 5px;
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    .buttons button {
+        padding: 8px 16px;
+    }
+
+    .profile-picture img {
+        max-width: 150px;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .container {
+        padding: 15px;
+    }
+
+    .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .buttons button {
+        margin: 5px;
+    }
+}

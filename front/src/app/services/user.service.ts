@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { konobar } from '../models/konobar';
+import { gost } from '../models/gost';
 
 @Injectable({
   providedIn: 'root'
@@ -74,5 +75,25 @@ export class UserService {
 
   getAllKonobari(){
     return this.http.get<konobar[]>("http://localhost:4000/users/getAllKonobari");
+  }
+
+  getFileGost(username: string): Observable<ArrayBuffer>{
+    let data = {
+      username: username
+    }
+    return this.http.post("http://localhost:4000/users/getFileGost", data, { responseType: 'arraybuffer'})
+  }
+
+  private baseUrl = 'http://localhost:4000/users'; // Adjust this URL based on your backend setup
+
+  updateProfileGost(user: gost): Observable<any> {
+    return this.http.put<gost>(`${this.baseUrl}/updateProfileGost/${user.username}`, user);
+  }
+
+  updatePictureGost(username: string, file: File){
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('username', username)
+    return this.http.post("http://localhost:4000/users/updatePictureGost", formData);
   }
 }

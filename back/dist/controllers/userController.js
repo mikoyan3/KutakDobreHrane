@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -13,6 +36,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
+const fs = __importStar(require("fs"));
+const path = __importStar(require("path"));
 const gost_1 = __importDefault(require("../models/gost"));
 const konobar_1 = __importDefault(require("../models/konobar"));
 const admin_1 = __importDefault(require("../models/admin"));
@@ -93,6 +118,20 @@ class UserController {
                 else {
                     res.json({ message: "Uspesno", user: kor });
                 }
+            }).catch(err => {
+                console.log(err);
+            });
+        };
+        this.updatePictureGost = (req, res) => {
+            const file = req.file;
+            let filename = file.originalname;
+            if (!file || !filename) {
+                console.log("Neuspeh");
+                return;
+            }
+            const URL = file.filename;
+            gost_1.default.findOneAndUpdate({ username: req.body.username }, { $set: { pictureUrl: URL } }).then(resp => {
+                res.json(resp);
             }).catch(err => {
                 console.log(err);
             });
@@ -211,6 +250,19 @@ class UserController {
                 console.log(err);
             });
         };
+        this.getFileGost = (req, res) => {
+            const directory = path.join(__dirname, "../../uploads");
+            let username = req.body.username;
+            gost_1.default.findOne({ username: username }).then(korisnik => {
+                const filePath = path.join(directory, korisnik.pictureUrl);
+                if (fs.existsSync(filePath)) {
+                    res.type('application/octet-stream').sendFile(filePath);
+                }
+                else {
+                    return;
+                }
+            });
+        };
     }
     registerGost(req, res) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
@@ -254,6 +306,15 @@ class UserController {
                 reject(error);
             }
         }));
+    }
+    updateProfileGost(req, res) {
+        let updatedProfile = req.body;
+        let username = req.params.username;
+        gost_1.default.findOneAndUpdate({ username: username }, updatedProfile, { new: true }).then(updatedUser => {
+            res.json(updatedUser);
+        }).catch(err => {
+            console.log(err);
+        });
     }
 }
 exports.UserController = UserController;

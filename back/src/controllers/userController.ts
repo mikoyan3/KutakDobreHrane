@@ -123,6 +123,21 @@ export class UserController{
         });
     }
 
+    updatePictureGost = (req: express.Request, res: express.Response)=>{
+        const file: Express.Multer.File = (req as Request).file;
+        let filename: string = file.originalname;
+        if (!file || !filename) {
+            console.log("Neuspeh");
+            return;
+        }
+        const URL = file.filename;
+        Gost.findOneAndUpdate({username: req.body.username}, {$set: {pictureUrl: URL}}).then(resp=>{
+            res.json(resp);
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
+
     promenaLozinke = (req: express.Request, res: express.Response)=>{
         let username = req.body.username;
         let password = req.body.password;
@@ -231,4 +246,28 @@ export class UserController{
             console.log(err);
         })
     }
+
+    getFileGost = (req: express.Request, res: express.Response) =>{
+        const directory = path.join(__dirname, "../../uploads");
+        let username = req.body.username;
+        Gost.findOne({username: username}).then(korisnik=>{
+            const filePath = path.join(directory, korisnik.pictureUrl);
+            if(fs.existsSync(filePath)){
+                res.type('application/octet-stream').sendFile(filePath);
+            } else {
+                return;
+            }
+        })
+    }
+
+    updateProfileGost(req, res) {
+        let updatedProfile = req.body;
+        let username = req.params.username;
+      
+        Gost.findOneAndUpdate({ username: username }, updatedProfile, { new: true }).then(updatedUser => {
+          res.json(updatedUser);
+        }).catch(err => {
+          console.log(err);
+        });
+      }
 }
