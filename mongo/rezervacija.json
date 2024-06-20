@@ -1,0 +1,92 @@
+[
+  {
+    "datum": "2024-06-19T12:00:00Z",
+    "sto": "60a5b399fbcf7b2cd8aefd71",
+    "gost": "pavle",
+    "opis": "Rezervacija 1",
+    "status": "neostvarena",
+    "komentarKonobara": "",
+    "brojGostiju": 4
+  },
+  {
+    "datum": "2024-06-18T18:30:00Z",
+    "sto": "60a5b399fbcf7b2cd8aefd71",
+    "gost": "marko",
+    "opis": "Rezervacija 2",
+    "status": "ostvarena",
+    "komentarKonobara": "",
+    "brojGostiju": 2
+  },
+  {
+    "datum": "2024-06-15T20:00:00Z",
+    "sto": "60a5b399fbcf7b2cd8aefd71",
+    "gost": "test",
+    "opis": "Rezervacija 3",
+    "status": "naCekanju",
+    "komentarKonobara": "",
+    "brojGostiju": 6
+  },
+  {
+    "datum": "2024-06-12T14:30:00Z",
+    "sto": "60a5b399fbcf7b2cd8aefd71",
+    "gost": "pavle",
+    "opis": "Rezervacija 4",
+    "status": "potvrdjena",
+    "komentarKonobara": "",
+    "brojGostiju": 3
+  },
+  {
+    "datum": "2024-06-05T19:00:00Z",
+    "sto": "60a5b399fbcf7b2cd8aefd71",
+    "gost": "marko",
+    "opis": "Rezervacija 5",
+    "status": "odbijena",
+    "komentarKonobara": "Nema dovoljno mesta.",
+    "brojGostiju": 5
+  },
+  {
+    "datum": "2024-05-25T17:45:00Z",
+    "sto": "60a5b399fbcf7b2cd8aefd71",
+    "gost": "pavle",
+    "opis": "Rezervacija 6",
+    "status": "neostvarena",
+    "komentarKonobara": "",
+    "brojGostiju": 2
+  },
+  {
+    "datum": "2024-05-10T13:15:00Z",
+    "sto": "60a5b399fbcf7b2cd8aefd71",
+    "gost": "test",
+    "opis": "Rezervacija 7",
+    "status": "potvrdjena",
+    "komentarKonobara": "",
+    "brojGostiju": 4
+  },
+  {
+    "datum": "2024-04-20T21:30:00Z",
+    "sto": "60a5b399fbcf7b2cd8aefd71",
+    "gost": "marko",
+    "opis": "Rezervacija 8",
+    "status": "naCekanju",
+    "komentarKonobara": "",
+    "brojGostiju": 3
+  },
+  {
+    "datum": "2024-04-10T18:00:00Z",
+    "sto": "60a5b399fbcf7b2cd8aefd71",
+    "gost": "pavle",
+    "opis": "Rezervacija 9",
+    "status": "neostvarena",
+    "komentarKonobara": "",
+    "brojGostiju": 5
+  },
+  {
+    "datum": "2024-04-05T16:45:00Z",
+    "sto": "60a5b399fbcf7b2cd8aefd71",
+    "gost": "test",
+    "opis": "Rezervacija 10",
+    "status": "ostvarena",
+    "komentarKonobara": "",
+    "brojGostiju": 2
+  }
+]

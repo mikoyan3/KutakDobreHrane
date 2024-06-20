@@ -1,0 +1,24 @@
+<div class="login-container">
+  <h2 align="center">Login</h2>
+  <div class="input-field">
+      <label for="username">Username:</label>
+      <input type="text" id="username" [(ngModel)]="username">
+  </div>
+  <div class="input-field">
+      <label for="password">Password:</label>
+      <input type="password" id="password" [(ngModel)]="password">
+  </div>
+  <div class="input-field radio-group">
+      <label class="radio-label">
+          <input type="radio" name="userRole" value="gost" [(ngModel)]="userRole"> Gost
+      </label>
+      <label class="radio-label">
+          <input type="radio" name="userRole" value="konobar" [(ngModel)]="userRole"> Konobar
+      </label>
+  </div>
+  <div class="button-container">
+      <button (click)="login()">Login</button>
+      <button (click)="registerGost()">Registracija gosta</button>
+  </div>
+  <div class="error-message">{{message}}</div>
+</div>

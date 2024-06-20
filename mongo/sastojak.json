@@ -1,0 +1,42 @@
+[
+    {
+        "naziv": "Meso",
+        "jelo": 1
+    },
+    {
+        "naziv": "Luk",
+        "jelo": 1
+    },
+    {
+        "naziv": "Pasta",
+        "jelo": 2
+    },
+    {
+        "naziv": "Tomato Sauce",
+        "jelo": 2
+    },
+    {
+        "naziv": "Chicken",
+        "jelo": 3
+    },
+    {
+        "naziv": "Pineapple",
+        "jelo": 3
+    },
+    {
+        "naziv": "Tortilla",
+        "jelo": 4
+    },
+    {
+        "naziv": "Beef",
+        "jelo": 4
+    },
+    {
+        "naziv": "Rice",
+        "jelo": 5
+    },
+    {
+        "naziv": "Fish",
+        "jelo": 5
+    }
+]

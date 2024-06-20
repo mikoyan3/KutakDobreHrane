@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    background-color: #f7f7f7; 
+    padding: 20px; 
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    background: #8561a8;  
+    color: #fff;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: #64427a 3px solid; 
+}
+
+header h1 {
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.buttons button {
+    background: #8561a8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 4px; 
+}
+
+.buttons button:hover {
+    background: #64427a; 
+}
+
+.statistics {
+    margin: 20px 0;
+}
+
+.statistics h2, .search h2, .restaurant-list h2 {
+    border-bottom: #8561a8 2px solid; 
+    padding-bottom: 10px;
+    color: #8561a8; 
+}
+
+.search input {
+    padding: 10px;
+    margin-right: 10px;
+    width: calc(33% - 10px); 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.search button {
+    margin-top: 10px;
+    padding: 10px;
+    background: #8561a8;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px; 
+    text-align: center;
+}
+
+.search button:hover {
+    background: #64427a; 
+}
+
+.restaurant-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; 
+}
+
+.restaurant-list table, .restaurant-list th, .restaurant-list td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+.restaurant-list th {
+    background-color: #8561a8;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px; 
+}
+
+.restaurant-list th:hover {
+    background-color: #64427a; 
+}
+
+.restaurant-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+@media only screen and (max-width: 1200px) {
+    .container {
+        width: 600px; 
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .container {
+        width: 500px; 
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 400px; 
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .container {
+        width: 300px; 
+        padding: 10px;
+    }
+}
+
+@media only screen and (max-width: 375px) {
+    .container {
+        width: 250px; 
+        padding: 10px;
+    }
+
+    .search input {
+        width: 100%;  
+        margin-bottom: 10px; 
+    }
+}

@@ -1,0 +1,32 @@
+[
+    {
+        "username": "pavle",
+	"password": "Pavle1!",
+	"securityQuestion": "Koje je ime vaseg kucnog ljubimca?",
+	"securityAnswer": "dora",
+	"name": "Pavle",
+	"surname": "Perovic",
+	"gender": "m",
+	"address": "Bulevar 123",
+	"phoneNumber": "0641111111",
+        "email" : "pavle@mail.com",
+        "pictureUrl":"placeholder.jpg",
+	"creditCardNumber": "123456789",
+	"status": "odobren"
+    },
+    {
+	"username": "marko",
+	"password": "Marko1!",
+	"securityQuestion": "Koje je ime vaseg kucnog ljubimca?",
+	"securityAnswer": "dora",
+	"name": "Marko",
+	"surname": "Markovic",
+	"gender": "m",
+	"address": "Bulevar 12",
+	"phoneNumber": "0641111111",
+        "email" : "marko123@mail.com",
+        "pictureUrl":"placeholder.jpg",
+	"creditCardNumber": "1234567890",
+	"status": "neodobren"
+    }
+]

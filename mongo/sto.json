@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "restoran": "Restoran Pavle",
+        "brojMesta": 4
+    },
+    {
+        "id": 2,
+        "restoran": "Ilija's Bistro",
+        "brojMesta": 2
+    },
+    {
+        "id": 3,
+        "restoran": "Marko's Eatery",
+        "brojMesta": 6
+    },
+    {
+        "id": 4,
+        "restoran": "The Test Diner",
+        "brojMesta": 3
+    },
+    {
+        "id": 5,
+        "restoran": "Fusion Delight",
+        "brojMesta": 5
+    }
+]

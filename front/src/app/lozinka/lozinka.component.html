@@ -1,0 +1,52 @@
+<div class="login-container">
+    <h2 align="center">Promena lozinke</h2>
+    <div *ngIf="formType === 1">
+        <div class="input-field">
+            <label for="oldPassword">Username:</label>
+            <input type="text" [(ngModel)]="username" required>
+        </div>
+        <div class="input-field">
+            <label for="oldPassword">Stara lozinka:</label>
+            <input type="password" [(ngModel)]="oldPassword" required>
+        </div>
+        <div class="input-field">
+            <label for="newPassword">Nova lozinka:</label>
+            <input type="password" [(ngModel)]="newPassword" required>
+        </div>
+        <div class="input-field">
+            <label for="confirmNewPassword">Ponovite novu lozinku:</label>
+            <input type="password"  [(ngModel)]="confirmNewPassword" required>
+        </div>
+        <button (click)="promenaLozinke()">Promeni lozinku</button>
+        <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    </div>
+    <div *ngIf="formType === 2">
+        <div class="input-field">
+            <label for="username">Korisničko ime:</label>
+            <input type="text" [(ngModel)]="username" required>
+            <button (click)="dohvatiSigurnosnoPitanje()">Prikazi sigurnosno pitanje</button>
+            <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+            <div *ngIf="showSecurityQuestion">
+                <label for="securityQuestion">Sigurnosno pitanje: {{securityQuestion}}</label>
+                <div class="input-field">
+                    <label for="securityAnswer">Odgovor na sigurnosno pitanje:</label>
+                    <input type="text" [(ngModel)]="securityAnswer" required>
+                </div>
+                <button (click)="proveriSigurnosnoPitanje()">Potvrdi odgovor</button>
+                <div class="error-message" *ngIf="securityQuestionError">{{ securityQuestionError }}</div>
+            </div>
+            <div *ngIf="showNewPasswordForm">
+                <div class="input-field">
+                    <label for="newPassword">Nova lozinka:</label>
+                    <input type="password" [(ngModel)]="newPassword" required>
+                </div>
+                <div class="input-field">
+                    <label for="confirmNewPassword">Ponovite novu lozinku:</label>
+                    <input type="password" [(ngModel)]="confirmNewPassword" required>
+                </div>
+                <button type="submit" (click)="promenaLozinkeSigurnosnoPitanje()">Promeni lozinku</button>
+                <div class="error-message" *ngIf="errorMessageSig">{{ errorMessageSig }}</div>
+            </div>
+        </div>
+    </div>
+</div>

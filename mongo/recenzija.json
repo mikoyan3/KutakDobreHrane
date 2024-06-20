@@ -1,0 +1,27 @@
+[
+    {
+        "restoran": "Restoran Pavle",
+        "ocena": 5,
+        "komentar": "Amazing food and service!"
+    },
+    {
+        "restoran": "Ilija's Bistro",
+        "ocena": 4,
+        "komentar": "Great ambiance and tasty dishes."
+    },
+    {
+        "restoran": "Marko's Eatery",
+        "ocena": 3,
+        "komentar": "Good food but a bit slow service."
+    },
+    {
+        "restoran": "The Test Diner",
+        "ocena": 2,
+        "komentar": "Average food, needs improvement."
+    },
+    {
+        "restoran": "Fusion Delight",
+        "ocena": 1,
+        "komentar": "Poor service and food quality."
+    }
+]

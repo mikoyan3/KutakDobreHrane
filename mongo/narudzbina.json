@@ -1,0 +1,72 @@
+[
+    {
+        "restoran": "Restoran Pavle",
+        "status": "naCekanju",
+        "procenjenoVremeDostave": 30,
+        "deoNarudzbine": [
+            {
+                "jelo": 1,
+                "kolicina": 2,
+                "cena": 1000
+            },
+            {
+                "jelo": 2,
+                "kolicina": 1,
+                "cena": 700
+            }
+        ],
+        "cena": 1700
+    },
+    {
+        "restoran": "Ilija's Bistro",
+        "status": "potvrdjena",
+        "procenjenoVremeDostave": 40,
+        "deoNarudzbine": [
+            {
+                "jelo": 2,
+                "kolicina": 1,
+                "cena": 700
+            }
+        ],
+        "cena": 700
+    },
+    {
+        "restoran": "Marko's Eatery",
+        "status": "odbijena",
+        "procenjenoVremeDostave": 50,
+        "deoNarudzbine": [
+            {
+                "jelo": 3,
+                "kolicina": 3,
+                "cena": 1800
+            }
+        ],
+        "cena": 1800
+    },
+    {
+        "restoran": "The Test Diner",
+        "status": "naCekanju",
+        "procenjenoVremeDostave": 20,
+        "deoNarudzbine": [
+            {
+                "jelo": 4,
+                "kolicina": 4,
+                "cena": 1600
+            }
+        ],
+        "cena": 1600
+    },
+    {
+        "restoran": "Fusion Delight",
+        "status": "potvrdjena",
+        "procenjenoVremeDostave": 60,
+        "deoNarudzbine": [
+            {
+                "jelo": 5,
+                "kolicina": 2,
+                "cena": 1600
+            }
+        ],
+        "cena": 1600
+    }
+]

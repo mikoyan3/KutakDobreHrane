@@ -1,0 +1,27 @@
+[
+    {
+        "jelo": 1,
+        "kolicina": 2,
+        "cena": 1000
+    },
+    {
+        "jelo": 2,
+        "kolicina": 1,
+        "cena": 700
+    },
+    {
+        "jelo": 3,
+        "kolicina": 3,
+        "cena": 1800
+    },
+    {
+        "jelo": 4,
+        "kolicina": 4,
+        "cena": 1600
+    },
+    {
+        "jelo": 5,
+        "kolicina": 2,
+        "cena": 1600
+    }
+]

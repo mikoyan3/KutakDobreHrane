@@ -1,0 +1,27 @@
+[
+    {
+        "restoran": "Restoran Pavle",
+        "pocetak": "09:00",
+        "kraj": "22:00"
+    },
+    {
+        "restoran": "Ilija's Bistro",
+        "pocetak": "08:00",
+        "kraj": "23:00"
+    },
+    {
+        "restoran": "Marko's Eatery",
+        "pocetak": "10:00",
+        "kraj": "21:00"
+    },
+    {
+        "restoran": "The Test Diner",
+        "pocetak": "11:00",
+        "kraj": "20:00"
+    },
+    {
+        "restoran": "Fusion Delight",
+        "pocetak": "12:00",
+        "kraj": "00:00"
+    }
+]

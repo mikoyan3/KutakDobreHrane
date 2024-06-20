@@ -1,0 +1,10 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-gost',
+  templateUrl: './gost.component.html',
+  styleUrls: ['./gost.component.css']
+})
+export class GostComponent {
+
+}

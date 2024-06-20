@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "restoran": "Restoran Pavle",
+        "naziv": "Cevapi",
+        "slika": "placeholder.jpg",
+        "cena": 500
+    },
+    {
+        "id": 2,
+        "restoran": "Ilija's Bistro",
+        "naziv": "Pasta",
+        "slika": "placeholder.jpg",
+        "cena": 700
+    },
+    {
+        "id": 3,
+        "restoran": "Marko's Eatery",
+        "naziv": "Sweet and Sour Chicken",
+        "slika": "placeholder.jpg",
+        "cena": 600
+    },
+    {
+        "id": 4,
+        "restoran": "The Test Diner",
+        "naziv": "Tacos",
+        "slika": "placeholder.jpg",
+        "cena": 400
+    },
+    {
+        "id": 5,
+        "restoran": "Fusion Delight",
+        "naziv": "Sushi",
+        "slika": "placeholder.jpg",
+        "cena": 800
+    }
+]

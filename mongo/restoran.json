@@ -1,0 +1,37 @@
+[
+    {
+        "naziv": "Restoran Pavle",
+        "adresa": "Ulica Pavla 1",
+        "tip": "Serbian",
+        "telefon": "0611111111",
+        "opis": "Tradicionalni srpski restoran."
+    },
+    {
+        "naziv": "Ilija's Bistro",
+        "adresa": "Ulica Ilije 2",
+        "tip": "Italian",
+        "telefon": "0622222222",
+        "opis": "Autentični italijanski bistro."
+    },
+    {
+        "naziv": "Marko's Eatery",
+        "adresa": "Ulica Marka 3",
+        "tip": "Chinese",
+        "telefon": "0633333333",
+        "opis": "Najbolji kineski specijaliteti."
+    },
+    {
+        "naziv": "The Test Diner",
+        "adresa": "Ulica Testa 4",
+        "tip": "Mexican",
+        "telefon": "0644444444",
+        "opis": "Ukusna meksička hrana."
+    },
+    {
+        "naziv": "Fusion Delight",
+        "adresa": "Ulica Fuzije 5",
+        "tip": "Fusion",
+        "telefon": "0655555555",
+        "opis": "Spoj različitih svetskih kuhinja."
+    }
+]

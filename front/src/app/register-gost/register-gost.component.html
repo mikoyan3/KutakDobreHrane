@@ -1,0 +1,60 @@
+<div class="login-container">
+  <h2>Register</h2>
+  <div class="input-field">
+    <label for="username">Username</label>
+    <input type="text" id="username" [(ngModel)]="username">
+  </div>
+  <div class="input-field">
+    <label for="password">Password</label>
+    <input type="password" id="password" [(ngModel)]="password">
+  </div>
+  <div class="input-field">
+    <label for="securityQuestion">Sigurnosno pitanje</label>
+    <input type="text" id="pitanje" [(ngModel)]="securityQuestion">
+  </div>
+  <div class="input-field">
+    <label for="securityQuestionAnswer">Odgovor</label>
+    <input type="text" id="odgovor" [(ngModel)]="securityAnswer">
+  </div>
+  <div class="input-field">
+    <label for="ime">Ime</label>
+    <input type="text" id="ime" [(ngModel)]="name">
+  </div>
+  <div class="input-field">
+    <label for="prezime">Prezime</label>
+    <input type="text" id="prezime" [(ngModel)]="surname">
+  </div>
+  <div class="input-field radio-group">
+    <div class="radio-label">
+      <input type="radio" id="musko" name="gender" [(ngModel)]="gender" value="m">
+      <label for="musko">Musko</label>
+    </div>
+    <div class="radio-label">
+      <input type="radio" id="zensko" name="gender" [(ngModel)]="gender" value="z">
+      <label for="zensko">Zensko</label>
+    </div>
+  </div>
+  <div class="input-field">
+    <label for="adresa">Adresa</label>
+    <input type="text" id="adresa" [(ngModel)]="address">
+  </div>
+  <div class="input-field">
+    <label for="telefon">Telefon</label>
+    <input type="text" id="telefon" [(ngModel)]="phoneNumber">
+  </div>
+  <div class="input-field">
+    <label for="email">Email</label>
+    <input type="text" id="email" [(ngModel)]="email">
+  </div>
+  <div class="input-field">
+    Profilna slika
+    <input type="file" id="profilePicture" (change)="onFileSelected($event)" name="file" accept="image/*" required>
+  </div>
+  <div class="input-field">
+    <label for="cardNumber">Broj kreditne kartice</label>
+    <input type="text" id="cardNumber" [(ngModel)]="creditCardNumber">
+  </div>
+  <button (click)="register()">Register</button>
+  <div class="error-message">{{errorMessage}}</div>
+  <div class="success-message">{{successMessage}}</div>
+</div>
