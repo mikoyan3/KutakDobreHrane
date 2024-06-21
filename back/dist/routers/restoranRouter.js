@@ -13,4 +13,7 @@ restoranRouter.route("/getReservationsLast7Days").get((req, res) => restoranCont
 restoranRouter.route("/getReservationsLastMonth").get((req, res) => restoranController.getReservationsLastMonth(req, res));
 restoranRouter.route("/getAllRestorani").get((req, res) => restoranController.getAllRestorani(req, res));
 restoranRouter.route("/getAllRestoraniWithRatings").get((req, res) => restoranController.getAllRestoraniWithRatings(req, res));
+restoranRouter.route("/getRestoranWithNaziv").post((req, res) => restoranController.getRestoranWithNaziv(req, res));
+restoranRouter.route("/getRecenzijeForRestoran").post((req, res) => restoranController.getRecenzijeForRestoran(req, res));
+restoranRouter.route("/kreirajRezervaciju").post((req, res) => restoranController.kreirajRezervaciju(req, res));
 exports.default = restoranRouter;

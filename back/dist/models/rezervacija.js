@@ -7,7 +7,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 let Rezervacija = new Schema({
     datum: {
-        type: Date
+        type: String
     },
     sto: {
         type: Number

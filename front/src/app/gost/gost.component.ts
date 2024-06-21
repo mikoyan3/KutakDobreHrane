@@ -3,6 +3,7 @@ import { gost } from '../models/gost';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { UserService } from '../services/user.service';
 import { RestoranService } from '../services/restoran.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gost',
@@ -31,7 +32,7 @@ export class GostComponent implements OnInit{
   searchTip = '';
   sortDirection = 'asc';
 
-  constructor(private userService: UserService, private sanitizer: DomSanitizer, private restoranService: RestoranService){}
+  constructor(private userService: UserService, private sanitizer: DomSanitizer, private restoranService: RestoranService, private router: Router){}
 
   ngOnInit(): void {
     this.errorMessage = "";
@@ -140,5 +141,10 @@ export class GostComponent implements OnInit{
 
   getStars(rating: number): number[] {
     return Array(Math.round(rating)).fill(0).map((x, i) => i);
+  }
+
+  pregledajRestoran(naziv: string){
+    localStorage.setItem('restoran', naziv);
+    this.router.navigate(['restoran']);
   }
 }

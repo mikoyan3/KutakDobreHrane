@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { restoran } from '../models/restoran';
+import { recenzija } from '../models/recenzija';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +33,30 @@ export class RestoranService {
 
   getAllRestoraniWithRatings(): Observable<any>{
     return this.http.get("http://localhost:4000/restoran/getAllRestoraniWithRatings")
+  }
+
+  getRestoranWithNaziv(naziv: string){
+    let data = {
+      naziv: naziv
+    }
+    return this.http.post<restoran>("http://localhost:4000/restoran/getRestoranWithNaziv", data)
+  }
+
+  getRecenzijeForRestoran(naziv: string){
+    let data = {
+      naziv: naziv
+    }
+    return this.http.post<recenzija[]>("http://localhost:4000/restoran/getRecenzijeForRestoran", data)
+  }
+
+  kreirajRezervaciju(datum: Date, brojOsoba: number, opis: string, restoran: string, gost: string){
+    let data = {
+      datum: datum,
+      brojOsoba: brojOsoba,
+      opis: opis,
+      restoran: restoran,
+      gost: gost
+    }
+    return this.http.post<string>("http://localhost:4000/restoran/kreirajRezervaciju", data)
   }
 }

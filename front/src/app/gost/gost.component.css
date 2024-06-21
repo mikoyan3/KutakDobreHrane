@@ -188,3 +188,13 @@ header h1 {
 .search button:hover {
     background: #64427a; 
 }
+
+.plain-text-link {
+    color: inherit; 
+    text-decoration: none; 
+    cursor: pointer; 
+}
+
+.plain-text-link:hover {
+    text-decoration: underline; 
+}

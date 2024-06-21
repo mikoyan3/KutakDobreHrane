@@ -8,6 +8,7 @@ import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { AdminComponent } from './admin/admin.component';
 import { RegisterGostComponent } from './register-gost/register-gost.component';
 import { LozinkaComponent } from './lozinka/lozinka.component';
+import { RestoranComponent } from './restoran/restoran.component';
 
 const routes: Routes = [
   { path: "", component: PocetnaComponent },
@@ -18,7 +19,7 @@ const routes: Routes = [
   { path: "adminDashboard", component: AdminComponent},
   { path: "registerGost", component: RegisterGostComponent},
   { path: "lozinka/:type", component: LozinkaComponent},
-  
+  { path: "restoran", component: RestoranComponent},
   
 ];
 

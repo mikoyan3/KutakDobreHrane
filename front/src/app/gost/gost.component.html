@@ -69,7 +69,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let restoran of filteredRestorani">
-          <td>{{ restoran.naziv }}</td>
+          <td><a (click)="pregledajRestoran(restoran.naziv)" class="plain-text-link">{{ restoran.naziv }}</a></td>
           <td>{{ restoran.adresa }}</td>
           <td>{{ restoran.tip }}</td>
           <td>

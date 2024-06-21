@@ -16,6 +16,8 @@ exports.RestoranController = void 0;
 const restoran_1 = __importDefault(require("../models/restoran"));
 const rezervacija_1 = __importDefault(require("../models/rezervacija"));
 const recenzija_1 = __importDefault(require("../models/recenzija"));
+const sto_1 = __importDefault(require("../models/sto"));
+const radnoVremeRestorana_1 = __importDefault(require("../models/radnoVremeRestorana"));
 const bcrypt = require('bcrypt');
 class RestoranController {
     constructor() {
@@ -29,6 +31,9 @@ class RestoranController {
         };
         this.getReservationsCount = (timeFrame, res) => {
             let startDate;
+            let endDate = new Date();
+            endDate.setHours(endDate.getHours() + 2);
+            console.log(endDate);
             switch (timeFrame) {
                 case '24h':
                     startDate = new Date();
@@ -51,7 +56,8 @@ class RestoranController {
             rezervacija_1.default.find({}).then(rezultati => {
                 let cnt = 0;
                 rezultati.forEach(rez => {
-                    if (rez.datum >= startDate)
+                    let datum = new Date(rez.datum);
+                    if (datum >= startDate && datum <= endDate)
                         cnt++;
                 });
                 res.json({ count: cnt });
@@ -96,6 +102,90 @@ class RestoranController {
                 console.log(err);
             }
         });
+        this.getRestoranWithNaziv = (req, res) => {
+            let naziv = req.body.naziv;
+            restoran_1.default.findOne({ naziv: naziv }).then(rez => {
+                res.json(rez);
+            }).catch(err => {
+                console.log(err);
+            });
+        };
+        this.getRecenzijeForRestoran = (req, res) => {
+            let naziv = req.body.naziv;
+            recenzija_1.default.find({ restoran: naziv }).then(rez => {
+                res.json(rez);
+            }).catch(err => {
+                console.log(err);
+            });
+        };
+    }
+    kreirajRezervaciju(req, res) {
+        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            let datum = req.body.datum;
+            let brojOsoba = req.body.brojOsoba;
+            let opis = req.body.opis;
+            let restoran = req.body.restoran;
+            let gost = req.body.gost;
+            try {
+                const pocetakRezervacije = new Date(datum);
+                pocetakRezervacije.setHours(pocetakRezervacije.getHours() + 2);
+                const krajRezervacije = new Date(datum);
+                krajRezervacije.setHours(krajRezervacije.getHours() + 5);
+                const radnoVreme = yield radnoVremeRestorana_1.default.findOne({ restoran });
+                const pocetakRadnogVremena = new Date(pocetakRezervacije.getFullYear(), pocetakRezervacije.getMonth(), pocetakRezervacije.getDate(), parseInt(radnoVreme.pocetak.split(':')[0]), parseInt(radnoVreme.pocetak.split(':')[1]));
+                const krajRadnogVremena = new Date(pocetakRezervacije.getFullYear(), pocetakRezervacije.getMonth(), pocetakRezervacije.getDate(), parseInt(radnoVreme.kraj.split(':')[0]), parseInt(radnoVreme.kraj.split(':')[1]));
+                pocetakRadnogVremena.setHours(pocetakRadnogVremena.getHours() + 2);
+                krajRadnogVremena.setHours(krajRadnogVremena.getHours() + 2);
+                if (pocetakRezervacije < pocetakRadnogVremena || krajRezervacije > krajRadnogVremena) {
+                    return res.json("Restoran ne radi u trazenom terminu");
+                }
+                let slobodniStolovi = yield sto_1.default.find({
+                    restoran,
+                    brojMesta: { $gte: brojOsoba }
+                });
+                if (slobodniStolovi.length == 0) {
+                    return res.json("Ne postoji sto u restoranu sa dovoljnim kapacitetom!");
+                }
+                let rezervacije = yield rezervacija_1.default.find({ status: { $in: ['naCekanju', 'potvrdjena'] } });
+                rezervacije = rezervacije.filter(rez => {
+                    const pocetakRez = new Date(rez.datum);
+                    const krajRez = new Date(rez.datum);
+                    krajRez.setHours(krajRez.getHours() + 3);
+                    if (!(pocetakRezervacije >= krajRez || krajRezervacije <= pocetakRez)) {
+                        return true;
+                    }
+                    return false;
+                });
+                let trazeniStoId = -1;
+                let noviStolovi = [];
+                const stoId = Array.from(new Set(rezervacije.map(rez => rez.sto)));
+                noviStolovi = slobodniStolovi.filter(sto => {
+                    if (stoId.includes(sto.id)) {
+                        return false;
+                    }
+                    return true;
+                });
+                if (noviStolovi.length == 0) {
+                    return res.json("Ne postoji slobodan sto u trazeno vreme!");
+                }
+                noviStolovi.sort((a, b) => a.brojMesta - b.brojMesta);
+                trazeniStoId = noviStolovi[0].id;
+                const novaRezervacija = new rezervacija_1.default({
+                    datum: pocetakRezervacije.toISOString(),
+                    sto: trazeniStoId,
+                    gost: gost,
+                    opis: opis,
+                    status: "naCekanju",
+                    komentarKonobara: "",
+                    brojGostiju: brojOsoba
+                });
+                yield novaRezervacija.save();
+                res.json("Uspesno ste poslali zahtev za rezervacijom!");
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }));
     }
 }
 exports.RestoranController = RestoranController;

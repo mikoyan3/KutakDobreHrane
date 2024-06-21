@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 let Rezervacija = new Schema({
     datum:{
-        type: Date
+        type: String
     },
     sto: {
         type: Number
