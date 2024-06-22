@@ -4,6 +4,9 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { UserService } from '../services/user.service';
 import { RestoranService } from '../services/restoran.service';
 import { Router } from '@angular/router';
+import { rezervacija } from '../models/rezervacija';
+import { RezervacijeService } from '../services/rezervacije.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-gost',
@@ -24,6 +27,7 @@ export class GostComponent implements OnInit{
   successMessage: string = ""
   flagProfil: boolean = true;
   flagRestoran: boolean = false;
+  rezervacijeFlag: boolean = false;
   restorani = [];
   konobari = [];
   filteredRestorani = [];
@@ -31,8 +35,16 @@ export class GostComponent implements OnInit{
   searchAdresa = '';
   searchTip = '';
   sortDirection = 'asc';
-
-  constructor(private userService: UserService, private sanitizer: DomSanitizer, private restoranService: RestoranService, private router: Router){}
+  
+  aktuelneRezervacije: rezervacija[] = []; 
+  arhiviraneRezervacije: rezervacija[] = [];
+  reviewFormId: number | null = null; 
+  noviKomentar: string = ''; 
+  rating: number = 0; 
+  reviewFormRestoran: string = '';
+  success: string = '';
+  fail: string = '';
+  constructor(private datePipe: DatePipe, private userService: UserService, private sanitizer: DomSanitizer, private restoranService: RestoranService, private router: Router, private rezervacijeService: RezervacijeService){}
 
   ngOnInit(): void {
     this.errorMessage = "";
@@ -54,6 +66,59 @@ export class GostComponent implements OnInit{
         this.filteredRestorani = this.restorani;
         this.userService.getAllKonobari().subscribe(kon=>{
           this.konobari = kon;
+          this.rezervacijeService.getAktuelneRezervacije(this.korisnik.username).subscribe((rez: any)=>{
+            if(rez.message == "Nema aktuelnih rezervacija"){
+              this.aktuelneRezervacije = [];
+            } else {
+              rez.rezervacije.forEach(r=>{
+                rez.stolovi.forEach(s=>{
+                  rez.restorani.forEach(rst=>{
+                    if(r.sto == s.id && s.restoran == rst.naziv){
+                      let newRez: rezervacija = new rezervacija();
+                      newRez.adresa = rst.adresa;
+                      newRez.brojGostiju = r.brojGostiju;
+                      newRez.datum = r.datum;
+                      newRez.gost = r.gost;
+                      newRez.id = r.id;
+                      newRez.komentarKonobara = r.komentarKonobara;
+                      newRez.opis = r.opis;
+                      newRez.restoran = rst.naziv;
+                      newRez.status = r.status;
+                      newRez.sto = r.sto;
+                      this.aktuelneRezervacije.push(newRez);
+                    }
+                  })
+                })
+              })
+            }
+            this.rezervacijeService.getArhiviraneRezervacije(this.korisnik.username).subscribe((arh: any)=>{
+              if(arh.message == "Nema arhiviranih rezervacija!"){
+                this.arhiviraneRezervacije = [];
+              }else{
+                this.arhiviraneRezervacije = arh.rezervacije.map(rezervacija=>{
+                  let sto = arh.stolovi.find(sto=>sto.id === rezervacija.sto);
+                  let restoran = sto ? sto.restoran : '';
+                  let recenzija = arh.recenzije.find(rec => rec.rezervacijaId === rezervacija.id);
+                  let komentar = recenzija ? recenzija.komentar : '';
+                  let ocena = recenzija ? recenzija.ocena : 0;
+                  return{
+                    ...rezervacija,
+                    restoran: restoran,
+                    komentar: komentar,
+                    ocena: ocena
+                  };
+                });
+                this.arhiviraneRezervacije.forEach(arhivirana=>{
+                  if(!arhivirana.komentar){
+                    arhivirana.komentar = '';
+                  }
+                  if(!arhivirana.ocena){
+                    arhivirana.ocena = 0;
+                  }
+                })
+              }
+            })
+          })
         })
       })
     })
@@ -111,13 +176,19 @@ export class GostComponent implements OnInit{
   profil(){
     this.flagProfil = true;
     this.flagRestoran = false;
+    this.rezervacijeFlag = false;
   }
 
   restoraniShow(){
     this.flagProfil = false;
     this.flagRestoran = true;
+    this.rezervacijeFlag = false;
   }
-  rezervacije(){}
+  rezervacije(){
+    this.rezervacijeFlag = true;
+    this.flagProfil = false;
+    this.flagRestoran = false;
+  }
   dostavaHrane(){}
 
   search() {
@@ -146,5 +217,64 @@ export class GostComponent implements OnInit{
   pregledajRestoran(naziv: string){
     localStorage.setItem('restoran', naziv);
     this.router.navigate(['restoran']);
+  }
+
+  isOtkaziva(datum: Date): boolean{
+    const dat = new Date(datum)
+    dat.setHours(dat.getHours() - 2);
+    const now = new Date();
+    const futureTime = new Date(now.getTime() + 45 * 60000);
+    return dat.getTime() >= futureTime.getTime();
+  }
+
+  formatDate(datum: Date): string {
+    let date = new Date(datum);
+    date.setHours(date.getHours() - 2);
+    const month = this.padWithZero(date.getMonth() + 1); 
+    const day = this.padWithZero(date.getDate());
+    const year = date.getFullYear();
+    let hours = this.padWithZero(date.getHours());
+    const minutes = this.padWithZero(date.getMinutes());
+    const seconds = this.padWithZero(date.getSeconds());
+  
+    const formattedDate = `${month}.${day}.${year} ${hours}:${minutes}:${seconds}`;
+  
+    return formattedDate;
+  }
+  
+  padWithZero(num: number): string {
+    return num < 10 ? '0' + num : num.toString();
+  }
+
+  otkaziRezervaciju(id: number){
+    this.rezervacijeService.otkaziRezervaciju(id).subscribe(rez=>{
+      this.ngOnInit();
+    })
+  }
+
+  submitReview(): void{
+    this.rezervacijeService.ostaviRecenziju(this.reviewFormId, this.noviKomentar, this.rating, this.reviewFormRestoran).subscribe(rez=>{
+      if(rez == "Uspesno ste ostavili recenziju!"){
+        this.fail = "";
+        this.success = rez;
+      } else {
+        this.success = "";
+        this.fail = rez;
+      }
+      this.reviewFormId = null;
+      this.noviKomentar = '';
+      this.rating = 0;
+    })
+  }
+
+  openReviewForm(reservation: rezervacija): void {
+    this.reviewFormId = reservation.id;
+    this.reviewFormRestoran = reservation.restoran;
+    this.noviKomentar = ''; 
+    this.rating = 0; 
+  }
+
+  setRating(rating: number): void {
+    this.rating = rating;
   }
 }

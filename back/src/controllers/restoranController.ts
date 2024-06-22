@@ -11,6 +11,7 @@ import Rezervacija from "../models/rezervacija"
 import Recenzija from "../models/recenzija"
 import Sto from "../models/sto"
 import RadnoVremeRestorana from "../models/radnoVremeRestorana"
+import Jelo from "../models/jelo";
 
 const bcrypt = require('bcrypt');
 
@@ -188,7 +189,15 @@ export class RestoranController{
 
                 noviStolovi.sort((a, b) => a.brojMesta - b.brojMesta);
                 trazeniStoId = noviStolovi[0].id;
-
+                let maxId = 0;
+                await Rezervacija.find({}).then(rez=>{
+                    rez.forEach(r=>{
+                        if(r.id > maxId){
+                            maxId = r.id;
+                        }
+                    })
+                })
+                maxId = maxId + 1;
                 const novaRezervacija = new Rezervacija({
                     datum: pocetakRezervacije.toISOString(),
                     sto: trazeniStoId,
@@ -196,7 +205,8 @@ export class RestoranController{
                     opis: opis,
                     status: "naCekanju",
                     komentarKonobara: "",
-                    brojGostiju: brojOsoba
+                    brojGostiju: brojOsoba,
+                    id: maxId
                 })
 
                 await novaRezervacija.save();
@@ -205,5 +215,29 @@ export class RestoranController{
                 console.log(err);
             }
         });
+    }
+
+    getJelaForRestoran = (req: express.Request, res: express.Response)=>{
+        let restoran = req.body.restoran;
+        Jelo.find({restoran: restoran}).then(rez=>{
+            res.json(rez);
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
+
+    getSlikaJelo = (req: express.Request, res: express.Response) =>{
+        const directory = path.join(__dirname, "../../uploads");
+        let jeloId = req.body.jeloId;
+        Jelo.findOne({id: jeloId}).then(rez=>{
+            const filePath = path.join(directory, rez.slika);
+            if(fs.existsSync(filePath)){
+                res.type('application/octet-stream').sendFile(filePath);
+            } else {
+                return;
+            }
+        }).catch(err=>{
+            console.log(err);
+        })
     }
 }

@@ -15,4 +15,6 @@ restoranRouter.route("/getAllRestoraniWithRatings").get((req,res)=>restoranContr
 restoranRouter.route("/getRestoranWithNaziv").post((req,res)=>restoranController.getRestoranWithNaziv(req,res));
 restoranRouter.route("/getRecenzijeForRestoran").post((req,res)=>restoranController.getRecenzijeForRestoran(req,res));
 restoranRouter.route("/kreirajRezervaciju").post((req,res)=>restoranController.kreirajRezervaciju(req,res));
+restoranRouter.route("/getJelaForRestoran").post((req,res)=>restoranController.getJelaForRestoran(req,res));
+restoranRouter.route("/getSlikaJelo").post((req,res)=>restoranController.getSlikaJelo(req,res));
 export default restoranRouter;

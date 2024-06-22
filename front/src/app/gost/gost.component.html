@@ -91,4 +91,70 @@
       </tbody>
     </table>
   </section>
+  <section class="restaurant-list" *ngIf="rezervacijeFlag == true">
+    <h2>Lista aktuelnih rezervacija</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Restoran</th>
+          <th>Datum</th>
+          <th>Adresa</th>
+          <th>Otkazi rezervaciju</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rezervacija of aktuelneRezervacije">
+          <td>{{ rezervacija.restoran }}</td>
+          <td>{{ formatDate(rezervacija.datum) }}</td>
+          <td>{{ rezervacija.adresa }}</td>
+          <td><button *ngIf="isOtkaziva(rezervacija.datum)" (click)="otkaziRezervaciju(rezervacija.id)">Otkazi rezervaciju</button></td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <h2>Lista arhiviranih rezervacija</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Restoran</th>
+          <th>Datum</th>
+          <th>Recenzija</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rezervacija of arhiviraneRezervacije">
+          <td>{{ rezervacija.restoran }}</td>
+          <td>{{ formatDate(rezervacija.datum) }}</td>
+          <td>
+            <span *ngIf="rezervacija.status == 'neostvarena'">Niste se pojavili u restoranu!</span>
+            <span *ngIf="!(rezervacija.komentar == '' && rezervacija.ocena == 0)">
+              <strong>Komentar:</strong> {{ rezervacija.komentar }}
+              <strong> Ocena:</strong> {{ rezervacija.ocena }} / 5
+            </span>
+            <button *ngIf="rezervacija.komentar == '' && rezervacija.ocena == 0 && rezervacija.status == 'ostvarena'" (click)="openReviewForm(rezervacija)">Ostavi recenziju</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div class="review-form" *ngIf="reviewFormId !== null">
+      <h2>Ostavi recenziju</h2>
+      <form (submit)="submitReview()">
+        <label for="komentar">Slobodan komentar:</label><br>
+        <textarea id="komentar" name="komentar" [(ngModel)]="noviKomentar" rows="4" cols="50"></textarea><br>
+        <label for="ocena">Ocena:</label>
+        <div class="stars">
+          <span class="star" (click)="setRating(1)" [class.filled]="rating >= 1">&#9733;</span>
+          <span class="star" (click)="setRating(2)" [class.filled]="rating >= 2">&#9733;</span>
+          <span class="star" (click)="setRating(3)" [class.filled]="rating >= 3">&#9733;</span>
+          <span class="star" (click)="setRating(4)" [class.filled]="rating >= 4">&#9733;</span>
+          <span class="star" (click)="setRating(5)" [class.filled]="rating === 5">&#9733;</span>
+        </div><br>
+        <button type="submit">Potvrdi recenziju</button>
+        <span *ngIf="success != ''" style="color: green;">{{success}}</span>
+        <span *ngIf="fail != ''" style="color: red;">{{fail}}</span>
+      </form>
+    </div>
+  </section>
+  
 </div>

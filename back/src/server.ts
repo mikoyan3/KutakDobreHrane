@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import userRouter from "./routers/userRouter";
 import * as path from "path";
 import restoranRouter from "./routers/restoranRouter";
+import narudzbinaRouter from "./routers/narudzbinaRouter";
+import rezervacijeRouter from "./routers/rezervacijeRouter";
 
 const app = express();
 app.use(cors());
@@ -21,6 +23,8 @@ connection.once("open", () => {
 const router = express.Router();
 router.use("/users", userRouter);
 router.use("/restoran", restoranRouter);
+router.use("/narudzbina", narudzbinaRouter);
+router.use("/rezervacije", rezervacijeRouter);
 
 app.use("/", router);
 app.listen(4000, () => console.log(`Express server running on port 4000`));

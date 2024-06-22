@@ -23,6 +23,9 @@ let Rezervacija = new Schema({
     },
     brojGostiju: {
         type: Number
+    },
+    id: {
+        type: Number
     }
 });
 

@@ -1,47 +1,88 @@
 <div class="container">
     <header>
-        <h1>Detalji Restorana</h1>
+      <h1>Detalji Restorana</h1>
     </header>
     <section class="restaurant-details" *ngIf="restoran">
-        <h2>{{ restoran.naziv }}</h2>
-        <div class="details">
-            <p><strong>Adresa:</strong> {{ restoran.adresa }}</p>
-            <p><strong>Tip restorana:</strong> {{ restoran.tip }}</p>
-            <p><strong>Telefon:</strong> {{ restoran.telefon }}</p>
-        </div>
-        <div class="comments">
-            <h3>Komentari</h3>
-            <ul>
-                <li *ngFor="let recenzija of recenzije">
-                    <p><strong>Ocena:</strong> {{ recenzija.ocena }} / 5</p>
-                    <p><strong>Komentar:</strong> {{ recenzija.komentar }}</p>
-                </li>
-            </ul>
-        </div>
-        <div class="reservation">
-            <h3>Napravite Rezervaciju</h3>
-            <form (ngSubmit)="makeReservation()">
-                <div class="form-group">
-                    <label for="date">Datum i vreme:</label>
-                    <input type="datetime-local" id="date" name="date" [(ngModel)]="reservation.date" required>
+      <h2>{{ restoran.naziv }}</h2>
+      <div class="details">
+        <p><strong>Adresa:</strong> {{ restoran.adresa }}</p>
+        <p><strong>Tip restorana:</strong> {{ restoran.tip }}</p>
+        <p><strong>Telefon:</strong> {{ restoran.telefon }}</p>
+      </div>
+      <div class="comments">
+        <h3>Komentari</h3>
+        <ul>
+          <li *ngFor="let recenzija of recenzije">
+            <p><strong>Ocena:</strong> {{ recenzija.ocena }} / 5</p>
+            <p><strong>Komentar:</strong> {{ recenzija.komentar }}</p>
+          </li>
+        </ul>
+      </div>
+      <div class="reservation">
+        <h3>Napravite Rezervaciju</h3>
+        <form (ngSubmit)="makeReservation()">
+          <div class="form-group">
+            <label for="date">Datum i vreme:</label>
+            <input type="datetime-local" id="date" name="date" [(ngModel)]="reservation.date" required>
+          </div>
+          <div class="form-group">
+            <label for="people">Broj osoba:</label>
+            <input type="number" id="people" name="people" [(ngModel)]="reservation.people" min="1" required>
+          </div>
+          <div class="form-group">
+            <label for="requests">Dodatni zahtevi:</label>
+            <textarea id="requests" name="requests" [(ngModel)]="reservation.requests"></textarea>
+          </div>
+          <button type="submit">Rezerviši</button>
+          <div class="validation-messages">
+            <span style="color: red;" *ngIf="validationMessage !== ''">{{ validationMessage }}</span>
+            <span style="color: green;" *ngIf="validationMessageSuccess !== ''">{{ validationMessageSuccess }}</span>
+          </div>
+        </form>
+      </div>
+      <div class="menu">
+        <h3>Jelovnik</h3>
+        <ul>
+          <li *ngFor="let jelo of jelovnik">
+            <div class="menu-item">
+              <img [src]="slikeJela[jelo.id]" alt="{{ jelo.naziv }}">
+              <div class="menu-details">
+                <h4>{{ jelo.naziv }}</h4>
+                <p><strong>Cena:</strong> {{ jelo.cena }} RSD</p>
+                <p><strong>Sastojci:</strong></p>
+                <ul>
+                  <li *ngFor="let sastojak of jelo.sastojci">{{ sastojak.naziv }}</li>
+                </ul>
+                <div class="quantity">
+                  <label for="quantity-{{ jelo.id }}">Količina:</label>
+                  <input type="number" id="quantity-{{ jelo.id }}" name="quantity" [(ngModel)]="jelo.kolicina" min="1">
                 </div>
-                <div class="form-group">
-                    <label for="people">Broj osoba:</label>
-                    <input type="number" id="people" name="people" [(ngModel)]="reservation.people" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label for="requests">Dodatni zahtevi:</label>
-                    <textarea id="requests" name="requests" [(ngModel)]="reservation.requests"></textarea>
-                </div>
-                <button type="submit">Rezerviši</button>
-                <div class="validation-messages">
-                    <span style="color: red;" *ngIf="validationMessage != ''">{{ validationMessage }}</span>
-                    <span style="color: green;" *ngIf="validationMessageSuccess != ''">{{ validationMessageSuccess }}</span>
-                </div>
-            </form>
-        </div>
+                <button (click)="dodajUKorpu(jelo)">Dodaj u korpu</button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="cart">
+        <h3>Korpa</h3>
+        <ul>
+          <li *ngFor="let item of korpa">
+            <div class="cart-item">
+              <img [src]="slikeJela[item.jeloObjekat.id]" alt="{{ item.jeloObjekat.naziv }}">
+              <div class="cart-details">
+                <h4>{{ item.jeloObjekat.naziv }}</h4>
+                <p><strong>Cena:</strong> {{ item.cena }} RSD</p>
+                <p><strong>Količina:</strong> {{ item.kolicina }}</p>
+                <button (click)="ukloniIzKorpe(item)">Ukloni</button>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <button (click)="zavrsiPorudzbinu()">Završi porudžbinu</button>
+        <span style="color: green;" *ngIf="message!=''">{{ message }}</span>
+      </div>
     </section>
     <section *ngIf="!restoran">
-        <p>Učitavanje...</p>
+      <p>Učitavanje...</p>
     </section>
-</div>
+  </div>

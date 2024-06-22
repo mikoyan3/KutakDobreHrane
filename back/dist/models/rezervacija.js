@@ -26,6 +26,9 @@ let Rezervacija = new Schema({
     },
     brojGostiju: {
         type: Number
+    },
+    id: {
+        type: Number
     }
 });
 exports.default = mongoose_1.default.model("rezervacija", Rezervacija, "rezervacija");

@@ -3,7 +3,10 @@ import { deoNarudzbine } from "./deoNarudzbine";
 export class narudzbina{
     restoran: string;
     status: string;
-    procenjenoVremeDostave: number;
+    minVremeDostave: number;
+    maxVremeDostave: number;
+    datum: Date;
+    gost: string;
     deoNarudzbine: deoNarudzbine[] = [];
     cena: number; 
 }

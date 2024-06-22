@@ -20,6 +20,9 @@ let Jelo = new Schema({
     },
     cena: {
         type: Number
+    },
+    sastojci: {
+        type: Array
     }
 });
 exports.default = mongoose_1.default.model("Jelo", Jelo, "jelo");

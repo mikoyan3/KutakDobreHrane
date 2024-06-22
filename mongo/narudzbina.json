@@ -2,7 +2,10 @@
     {
         "restoran": "Restoran Pavle",
         "status": "naCekanju",
-        "procenjenoVremeDostave": 30,
+        "minVremeDostave": 20,
+	"maxVremeDostave": 30,
+	"datum": "2024-06-19T12:00:00Z",
+	"gost": "pavle",
         "deoNarudzbine": [
             {
                 "jelo": 1,
@@ -20,7 +23,10 @@
     {
         "restoran": "Ilija's Bistro",
         "status": "potvrdjena",
-        "procenjenoVremeDostave": 40,
+        "minVremeDostave": 30,
+	"maxVremeDostave": 40,
+	"datum": "2024-06-19T12:00:00Z",
+	"gost": "marko",
         "deoNarudzbine": [
             {
                 "jelo": 2,
@@ -33,7 +39,10 @@
     {
         "restoran": "Marko's Eatery",
         "status": "odbijena",
-        "procenjenoVremeDostave": 50,
+        "minVremeDostave": 50,
+	"maxVremeDostave": 60,
+	"datum": "2024-06-19T12:00:00Z",
+	"gost": "test",
         "deoNarudzbine": [
             {
                 "jelo": 3,
@@ -46,7 +55,10 @@
     {
         "restoran": "The Test Diner",
         "status": "naCekanju",
-        "procenjenoVremeDostave": 20,
+        "minVremeDostave": 20,
+	"maxVremeDostave": 30,
+	"datum": "2024-06-19T12:00:00Z",
+	"gost": "pavle",
         "deoNarudzbine": [
             {
                 "jelo": 4,
@@ -59,7 +71,10 @@
     {
         "restoran": "Fusion Delight",
         "status": "potvrdjena",
-        "procenjenoVremeDostave": 60,
+        "minVremeDostave": 50,
+	"maxVremeDostave": 60,
+	"datum": "2024-06-19T12:00:00Z",
+	"gost": "pavle",
         "deoNarudzbine": [
             {
                 "jelo": 5,

@@ -4,6 +4,11 @@ import { recenzija } from '../models/recenzija';
 import { RestoranService } from '../services/restoran.service';
 import { Router } from '@angular/router';
 import { gost } from '../models/gost';
+import { jelo } from '../models/jelo';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { deoNarudzbine } from '../models/deoNarudzbine';
+import { forkJoin } from 'rxjs';
+import { NarudzbinaService } from '../services/narudzbina.service';
 
 @Component({
   selector: 'app-restoran',
@@ -22,19 +27,28 @@ export class RestoranComponent implements OnInit{
   validationMessageSuccess: string = '';
   isReservationValid: boolean = true;
   gost: gost = null;
+  jelovnik: jelo[] = [];
+  korpa: deoNarudzbine[] = [];
+  slikeJela: { [key: number]: SafeUrl } = {};
+  message: string = "";
 
-  constructor(private restoranService: RestoranService, private router: Router){}
+  constructor(private restoranService: RestoranService, private router: Router, private sanitizer: DomSanitizer, private narudzbinaService: NarudzbinaService){}
   
   ngOnInit(): void {
+    this.message = "";
     let rest = localStorage.getItem('restoran');
     let usr = localStorage.getItem('ulogovan');
-    if(usr != null) this.gost = JSON.parse(usr);
-    this.restoranService.getRestoranWithNaziv(rest).subscribe(rez=>{
+    if (usr != null) this.gost = JSON.parse(usr);
+    this.restoranService.getRestoranWithNaziv(rest).subscribe(rez => {
       this.restoran = rez;
-      this.restoranService.getRecenzijeForRestoran(rest).subscribe(rec=>{
+      this.restoranService.getRecenzijeForRestoran(rest).subscribe(rec => {
         this.recenzije = rec;
-      })
-    })
+        this.restoranService.getJelaForRestoran(this.restoran.naziv).subscribe(jela => {
+          this.jelovnik = jela;
+          this.fetchAllImages();
+        });
+      });
+    });
   }
 
   makeReservation(){
@@ -60,6 +74,42 @@ export class RestoranComponent implements OnInit{
         this.validationMessageSuccess = '';
         this.validationMessage = rez;
       }
+    })
+  }
+
+  fetchAllImages() {
+    const imageRequests = this.jelovnik.map(jelo => this.restoranService.getSlikaJelo(jelo.id));
+    forkJoin(imageRequests).subscribe(results => {
+      results.forEach((data, index) => {
+        const blob = new Blob([data]);
+        const url = URL.createObjectURL(blob);
+        const fileDownloaded = this.sanitizer.bypassSecurityTrustUrl(url);
+        this.slikeJela[this.jelovnik[index].id] = fileDownloaded;
+      });
+    });
+  }
+
+  dodajUKorpu(jelo: jelo){
+    let cena = jelo.cena * jelo.kolicina;
+    let deo: deoNarudzbine = new deoNarudzbine()
+    deo.jelo = jelo.id;
+    deo.kolicina = jelo.kolicina;
+    deo.cena = cena;
+    deo.jeloObjekat = jelo;
+    this.korpa.push(deo);
+  }
+
+  ukloniIzKorpe(item: deoNarudzbine) {
+    const index = this.korpa.indexOf(item);
+    if (index > -1) {
+      this.korpa.splice(index, 1);
+    }
+  }
+
+  zavrsiPorudzbinu(){
+    this.narudzbinaService.generisiNovuNarudzbinu(this.korpa, this.restoran.naziv, this.gost.username).subscribe(rez=>{
+      this.message = rez;
+      this.korpa = [];
     })
   }
 }

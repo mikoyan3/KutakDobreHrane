@@ -5,6 +5,9 @@ const Schema = mongoose.Schema;
 let Recenzija = new Schema({
     restoran:{
         type: String
+    },
+    rezervacijaId:{
+        type: Number
     }, 
     ocena: {
         type: Number

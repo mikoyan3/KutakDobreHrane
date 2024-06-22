@@ -3,35 +3,75 @@
         "id": 1,
         "restoran": "Restoran Pavle",
         "naziv": "Cevapi",
-        "slika": "placeholder.jpg",
-        "cena": 500
+        "slika": "placeholder.png",
+        "cena": 500,
+	"sastojci": [
+		{
+			"naziv": "Meso"
+		},
+		{
+			"naziv": "Luk"
+		}
+	]
     },
     {
         "id": 2,
         "restoran": "Ilija's Bistro",
         "naziv": "Pasta",
-        "slika": "placeholder.jpg",
-        "cena": 700
+        "slika": "placeholder.png",
+        "cena": 700,
+	"sastojci": [
+		{
+			"naziv": "Pasta"
+		},
+		{
+			"naziv": "Tomato Sauce"
+		}
+	]
     },
     {
         "id": 3,
         "restoran": "Marko's Eatery",
         "naziv": "Sweet and Sour Chicken",
-        "slika": "placeholder.jpg",
-        "cena": 600
+        "slika": "placeholder.png",
+        "cena": 600,
+	"sastojci": [
+		{
+			"naziv": "Chicken"
+		},
+		{
+			"naziv": "Pineapple"
+		}
+	]
     },
     {
         "id": 4,
         "restoran": "The Test Diner",
         "naziv": "Tacos",
-        "slika": "placeholder.jpg",
-        "cena": 400
+        "slika": "placeholder.png",
+        "cena": 400,
+	"sastojci": [
+		{
+			"naziv": "Tortilla"
+		},
+		{
+			"naziv": "Beef"
+		}
+	]
     },
     {
         "id": 5,
         "restoran": "Fusion Delight",
         "naziv": "Sushi",
-        "slika": "placeholder.jpg",
-        "cena": 800
+        "slika": "placeholder.png",
+        "cena": 800,
+	"sastojci": [
+		{
+			"naziv": "Rice"
+		},
+		{
+			"naziv": "Fish"
+		}
+	]
     }
 ]

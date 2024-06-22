@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { restoran } from '../models/restoran';
 import { recenzija } from '../models/recenzija';
+import { jelo } from '../models/jelo';
 
 @Injectable({
   providedIn: 'root'
@@ -58,5 +59,19 @@ export class RestoranService {
       gost: gost
     }
     return this.http.post<string>("http://localhost:4000/restoran/kreirajRezervaciju", data)
+  }
+
+  getJelaForRestoran(restoran: string){
+    let data = {
+      restoran: restoran
+    }
+    return this.http.post<jelo[]>("http://localhost:4000/restoran/getJelaForRestoran", data)
+  }
+
+  getSlikaJelo(jeloId: number): Observable<ArrayBuffer>{
+    let data = {
+      jeloId: jeloId
+    }
+    return this.http.post("http://localhost:4000/restoran/getSlikaJelo", data, { responseType: 'arraybuffer'})
   }
 }

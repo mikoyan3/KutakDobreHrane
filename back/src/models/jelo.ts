@@ -17,6 +17,9 @@ let Jelo = new Schema({
     }, 
     cena: {
         type: Number
+    },
+    sastojci: {
+        type: Array
     }
 });
 

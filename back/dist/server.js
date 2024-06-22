@@ -32,6 +32,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const userRouter_1 = __importDefault(require("./routers/userRouter"));
 const path = __importStar(require("path"));
 const restoranRouter_1 = __importDefault(require("./routers/restoranRouter"));
+const narudzbinaRouter_1 = __importDefault(require("./routers/narudzbinaRouter"));
+const rezervacijeRouter_1 = __importDefault(require("./routers/rezervacijeRouter"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -44,5 +46,7 @@ connection.once("open", () => {
 const router = express_1.default.Router();
 router.use("/users", userRouter_1.default);
 router.use("/restoran", restoranRouter_1.default);
+router.use("/narudzbina", narudzbinaRouter_1.default);
+router.use("/rezervacije", rezervacijeRouter_1.default);
 app.use("/", router);
 app.listen(4000, () => console.log(`Express server running on port 4000`));

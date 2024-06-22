@@ -6,4 +6,9 @@ export class rezervacija{
     status: string;
     komentarKonobara: string;
     brojGostiju: number;
+    id: number;
+    restoran: string;
+    adresa: string = "";
+    komentar: string;
+    ocena: number;
 }

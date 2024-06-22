@@ -124,51 +124,121 @@ header h1 {
 
 .reservation {
     margin-top: 20px;
-  }
-  
-  .form-group {
+}
+
+.form-group {
     margin-bottom: 15px;
-  }
-  
-  .form-group label {
+}
+
+.form-group label {
     display: block;
     font-weight: bold;
-  }
-  
-  .form-group input,
-  .form-group textarea {
+}
+
+.form-group input,
+.form-group textarea {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
-  }
-  
-  button[type="submit"] {
+}
+
+button[type="submit"] {
     padding: 10px 20px;
     background-color: #8561a8;
     color: #fff;
     border: none;
     cursor: pointer;
-  }
-  
-  button[type="submit"]:hover {
+}
+
+button[type="submit"]:hover {
     background-color: #64427a;
-  }
-  
-  .validation-messages {
+}
+
+.menu {
+    margin-top: 20px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.menu-item img {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+
+.menu-details {
+    flex-grow: 1;
+}
+
+.quantity {
     margin-top: 10px;
-  }
-  
-  .validation-messages p {
+}
+
+.quantity label {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.cart {
+    margin-top: 20px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.cart-item img {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+
+.cart-details {
+    flex-grow: 1;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #8561a8;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #64427a;
+}
+
+.validation-messages {
+    margin-top: 10px;
+}
+
+.validation-messages p {
     padding: 10px;
     border-radius: 5px;
-  }
-  
-  .validation-messages p.error {
+}
+
+.validation-messages p.error {
     background-color: #f8d7da;
     color: #721c24;
-  }
-  
-  .validation-messages p.success {
+}
+
+.validation-messages p.success {
     background-color: #d4edda;
     color: #155724;
-  }
+}

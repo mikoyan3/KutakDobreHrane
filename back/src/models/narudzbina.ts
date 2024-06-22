@@ -9,8 +9,17 @@ let Narudzbina = new Schema({
     status: {
         type: String
     },
-    procenjenoVremeDostave: {
+    minVremeDostave: {
         type: Number
+    },
+    maxVremeDostave: {
+        type: Number
+    },
+    datum:{
+        type: String
+    },
+    gost:{
+        type: String
     },
     deoNarudzbine: {
         type: Array
