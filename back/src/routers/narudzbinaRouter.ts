@@ -6,5 +6,5 @@ const narudzbinaRouter = express.Router();
 const narudzbinaController = new NarudzbinaController();
 
 narudzbinaRouter.route("/generisiNovuNarudzbinu").post((req,res)=>narudzbinaController.generisiNovuNarudzbinu(req,res));
-
+narudzbinaRouter.route("/getNarudzbineForGost").post((req,res)=>narudzbinaController.getNarudzbineForGost(req,res));
 export default narudzbinaRouter;

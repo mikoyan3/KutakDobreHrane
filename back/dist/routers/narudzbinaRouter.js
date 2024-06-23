@@ -8,4 +8,5 @@ const narudzbinaController_1 = require("../controllers/narudzbinaController");
 const narudzbinaRouter = express_1.default.Router();
 const narudzbinaController = new narudzbinaController_1.NarudzbinaController();
 narudzbinaRouter.route("/generisiNovuNarudzbinu").post((req, res) => narudzbinaController.generisiNovuNarudzbinu(req, res));
+narudzbinaRouter.route("/getNarudzbineForGost").post((req, res) => narudzbinaController.getNarudzbineForGost(req, res));
 exports.default = narudzbinaRouter;

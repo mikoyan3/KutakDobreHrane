@@ -21,4 +21,11 @@ export class NarudzbinaService {
     }
     return this.http.post<string>("http://localhost:4000/narudzbina/generisiNovuNarudzbinu", data)
   }
+
+  getNarudzbineForGost(gost: string){
+    let data = {
+      gost: gost
+    }
+    return this.http.post("http://localhost:4000/narudzbina/getNarudzbineForGost", data)
+  }
 }

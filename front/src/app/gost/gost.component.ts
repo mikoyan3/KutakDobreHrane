@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { rezervacija } from '../models/rezervacija';
 import { RezervacijeService } from '../services/rezervacije.service';
 import { DatePipe } from '@angular/common';
+import { NarudzbinaService } from '../services/narudzbina.service';
 
 @Component({
   selector: 'app-gost',
@@ -28,6 +29,7 @@ export class GostComponent implements OnInit{
   flagProfil: boolean = true;
   flagRestoran: boolean = false;
   rezervacijeFlag: boolean = false;
+  dostavaHraneFlag: boolean = false;
   restorani = [];
   konobari = [];
   filteredRestorani = [];
@@ -35,7 +37,8 @@ export class GostComponent implements OnInit{
   searchAdresa = '';
   searchTip = '';
   sortDirection = 'asc';
-  
+  aktuelneNarudzbine = [];
+  arhiviraneNarudzbine = [];
   aktuelneRezervacije: rezervacija[] = []; 
   arhiviraneRezervacije: rezervacija[] = [];
   reviewFormId: number | null = null; 
@@ -44,7 +47,7 @@ export class GostComponent implements OnInit{
   reviewFormRestoran: string = '';
   success: string = '';
   fail: string = '';
-  constructor(private datePipe: DatePipe, private userService: UserService, private sanitizer: DomSanitizer, private restoranService: RestoranService, private router: Router, private rezervacijeService: RezervacijeService){}
+  constructor(private narudzbineService: NarudzbinaService,private datePipe: DatePipe, private userService: UserService, private sanitizer: DomSanitizer, private restoranService: RestoranService, private router: Router, private rezervacijeService: RezervacijeService){}
 
   ngOnInit(): void {
     this.errorMessage = "";
@@ -117,6 +120,16 @@ export class GostComponent implements OnInit{
                   }
                 })
               }
+              this.narudzbineService.getNarudzbineForGost(this.korisnik.username).subscribe((nar: any)=>{
+                this.arhiviraneNarudzbine = nar.arhivirane;
+                this.aktuelneNarudzbine = nar.aktuelne;
+                this.arhiviraneNarudzbine.sort((a, b) => {
+                  let dateA = new Date(a.datum);
+                  let dateB = new Date(b.datum);
+              
+                  return dateB.getTime() - dateA.getTime();
+              });
+              })
             })
           })
         })
@@ -177,19 +190,27 @@ export class GostComponent implements OnInit{
     this.flagProfil = true;
     this.flagRestoran = false;
     this.rezervacijeFlag = false;
+    this.dostavaHraneFlag = false;
   }
 
   restoraniShow(){
     this.flagProfil = false;
     this.flagRestoran = true;
     this.rezervacijeFlag = false;
+    this.dostavaHraneFlag = false;
   }
   rezervacije(){
     this.rezervacijeFlag = true;
     this.flagProfil = false;
     this.flagRestoran = false;
+    this.dostavaHraneFlag = false;
   }
-  dostavaHrane(){}
+  dostavaHrane(){
+    this.dostavaHraneFlag = true;
+    this.flagProfil = false;
+    this.rezervacijeFlag = false;
+    this.flagRestoran = false;
+  }
 
   search() {
     this.filteredRestorani = this.restorani.filter(r =>

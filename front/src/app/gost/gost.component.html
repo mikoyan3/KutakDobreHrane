@@ -156,5 +156,43 @@
       </form>
     </div>
   </section>
+  <section class="restaurant-list" *ngIf="dostavaHraneFlag == true">
+    <h2>Lista aktuelnih narudzbina</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Restoran</th>
+          <th>Status</th>
+          <th>Procenjeno vreme dostave</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let narudzbina of aktuelneNarudzbine">
+          <td>{{ narudzbina.restoran }}</td>
+          <td><span *ngIf="narudzbina.status == 'naCekanju'">Na cekanju!</span><span *ngIf="narudzbina.status == 'odbijena'">Odbijena!</span> <span *ngIf="narudzbina.status == 'potvrdjena'">Potvrdjena!</span></td>
+          <td *ngIf="narudzbina.minVremeDostave != 0">{{ narudzbina.minVremeDostave }} - {{ narudzbina.maxVremeDostave }}</td>
+        </tr>
+      </tbody>
+    </table>
   
+    <h2>Lista arhiviranih narudzbina</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Restoran</th>
+          <th>Datum</th>
+          <th>Iznos racuna</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let narudzbina of arhiviraneNarudzbine">
+          <td>{{ narudzbina.restoran }}</td>
+          <td>{{ formatDate(narudzbina.datum) }}</td>
+          <td>
+            {{ narudzbina.cena }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 </div>
