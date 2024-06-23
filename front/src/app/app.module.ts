@@ -14,6 +14,7 @@ import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { RegisterGostComponent } from './register-gost/register-gost.component';
 import { LozinkaComponent } from './lozinka/lozinka.component';
 import { RestoranComponent } from './restoran/restoran.component';
+import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { RestoranComponent } from './restoran/restoran.component';
     LoginAdminComponent,
     RegisterGostComponent,
     LozinkaComponent,
-    RestoranComponent
+    RestoranComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,

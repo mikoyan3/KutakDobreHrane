@@ -200,7 +200,7 @@ export class RestoranController{
                 maxId = maxId + 1;
                 const novaRezervacija = new Rezervacija({
                     datum: pocetakRezervacije.toISOString(),
-                    sto: trazeniStoId,
+                    sto: null,
                     gost: gost,
                     opis: opis,
                     status: "naCekanju",

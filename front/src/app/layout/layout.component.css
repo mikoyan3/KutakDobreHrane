@@ -1,0 +1,10 @@
+.canvas-container {
+    width: 600px; 
+    height: 500px; 
+    border: 2px solid black; 
+    display: inline-block; 
+}
+
+canvas {
+    display: block; 
+}

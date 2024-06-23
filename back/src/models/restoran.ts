@@ -17,6 +17,22 @@ let Restoran = new Schema({
     },
     opis: {
         type: String
+    },
+    kitchen: {
+        x:{
+            type: Number
+        },
+        y:{
+            type: Number
+        }
+    },
+    toilets: {
+        x:{
+            type: Number
+        },
+        y:{
+            type: Number
+        }
     }
 });
 

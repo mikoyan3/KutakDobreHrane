@@ -51,7 +51,7 @@ class RezervacijeController {
                 let gost = req.body.gost;
                 let trenutniDatum = new Date();
                 trenutniDatum.setHours(trenutniDatum.getHours() + 2);
-                let rezervacije = yield rezervacija_1.default.find({ gost: gost, status: { $ne: "odbijena" } });
+                let rezervacije = yield rezervacija_1.default.find({ gost: gost, status: { $nin: ["odbijena", "naCekanju"] } });
                 let arhiviraneRez = [];
                 rezervacije.forEach(rez => {
                     let datumRez = new Date(rez.datum);

@@ -1,1 +1,10 @@
-<p>admin works!</p>
+<div class="container">
+    <h2>Upload Layout</h2>
+    <form (ngSubmit)="uploadLayout()" enctype="multipart/form-data">
+      <input type="file" (change)="onFileSelected($event)" accept=".json">
+      <button type="submit">Upload Layout</button>
+    </form>
+  
+    <hr>
+  </div>
+  

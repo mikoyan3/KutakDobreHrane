@@ -74,4 +74,8 @@ export class RestoranService {
     }
     return this.http.post("http://localhost:4000/restoran/getSlikaJelo", data, { responseType: 'arraybuffer'})
   }
+
+  layout(){
+    return this.http.get("http://localhost:4000/restoran/layout")
+  }
 }

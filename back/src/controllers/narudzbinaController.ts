@@ -52,4 +52,6 @@ export class NarudzbinaController{
         nar.save();
         res.json("Uspesno ste kreirali zahtev za narudzbinom! Molimo sacekajte potvrdu konobara!")
     }
+
+    
 }

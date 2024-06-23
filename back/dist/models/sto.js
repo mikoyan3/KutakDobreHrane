@@ -14,6 +14,12 @@ let Sto = new Schema({
     },
     brojMesta: {
         type: Number
+    },
+    x: {
+        type: Number
+    },
+    y: {
+        type: Number
     }
 });
 exports.default = mongoose_1.default.model("Sto", Sto, "sto");

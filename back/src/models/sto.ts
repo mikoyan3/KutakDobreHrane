@@ -11,6 +11,12 @@ let Sto = new Schema({
     },
     brojMesta: {
         type: Number
+    },
+    x: {
+        type: Number
+    },
+    y: {
+        type: Number
     }
 });
 

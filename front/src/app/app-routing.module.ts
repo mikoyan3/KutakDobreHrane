@@ -9,6 +9,7 @@ import { AdminComponent } from './admin/admin.component';
 import { RegisterGostComponent } from './register-gost/register-gost.component';
 import { LozinkaComponent } from './lozinka/lozinka.component';
 import { RestoranComponent } from './restoran/restoran.component';
+import { LayoutComponent } from './layout/layout.component';
 
 const routes: Routes = [
   { path: "", component: PocetnaComponent },
@@ -20,7 +21,7 @@ const routes: Routes = [
   { path: "registerGost", component: RegisterGostComponent},
   { path: "lozinka/:type", component: LozinkaComponent},
   { path: "restoran", component: RestoranComponent},
-  
+  { path: "layout", component: LayoutComponent}
 ];
 
 @NgModule({

@@ -1,0 +1,48 @@
+{
+  "restoran": {
+    "naziv": "Test Bistro",
+    "adresa": "Ulica Test 1",
+    "tip": "French",
+    "telefon": "0699999999",
+    "opis": "Elegantni francuski restoran.",
+    "kitchen": { "x": 50, "y": 300 },   
+    "toilets": { "x": 750, "y": 550 }   
+  },
+  "tables": [
+    {
+      "id": 1,
+      "restoran": "Test Bistro",
+      "brojMesta": 4,
+      "x": 150,
+      "y": 100   
+    },
+    {
+      "id": 2,
+      "restoran": "Test Bistro",
+      "brojMesta": 2,
+      "x": 150,
+      "y": 200   
+    },
+    {
+      "id": 3,
+      "restoran": "Test Bistro",
+      "brojMesta": 6,
+      "x": 150,
+      "y": 300   
+    },
+    {
+      "id": 4,
+      "restoran": "Test Bistro",
+      "brojMesta": 3,
+      "x": 150,
+      "y": 400   
+    },
+    {
+      "id": 5,
+      "restoran": "Test Bistro",
+      "brojMesta": 5,
+      "x": 150,
+      "y": 500  
+    }
+  ]
+}

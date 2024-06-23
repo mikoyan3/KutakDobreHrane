@@ -2,26 +2,176 @@
     {
         "id": 1,
         "restoran": "Restoran Pavle",
-        "brojMesta": 4
+        "brojMesta": 4,
+        "x": 200,
+        "y": 100
     },
     {
         "id": 2,
-        "restoran": "Ilija's Bistro",
-        "brojMesta": 2
+        "restoran": "Restoran Pavle",
+        "brojMesta": 6,
+        "x": 200,
+        "y": 200
     },
     {
         "id": 3,
-        "restoran": "Marko's Eatery",
-        "brojMesta": 6
+        "restoran": "Restoran Pavle",
+        "brojMesta": 2,
+        "x": 300,
+        "y": 200
     },
     {
         "id": 4,
-        "restoran": "The Test Diner",
-        "brojMesta": 3
+        "restoran": "Restoran Pavle",
+        "brojMesta": 3,
+        "x": 300,
+        "y": 300
     },
     {
         "id": 5,
+        "restoran": "Restoran Pavle",
+        "brojMesta": 4,
+        "x": 200,
+        "y": 300
+    },
+    {
+        "id": 6,
+        "restoran": "Ilija's Bistro",
+        "brojMesta": 2,
+        "x": 400,
+        "y": 100
+    },
+    {
+        "id": 7,
+        "restoran": "Ilija's Bistro",
+        "brojMesta": 4,
+        "x": 450,
+        "y": 150
+    },
+    {
+        "id": 8,
+        "restoran": "Ilija's Bistro",
+        "brojMesta": 6,
+        "x": 500,
+        "y": 200
+    },
+    {
+        "id": 9,
+        "restoran": "Ilija's Bistro",
+        "brojMesta": 3,
+        "x": 450,
+        "y": 250
+    },
+    {
+        "id": 10,
+        "restoran": "Ilija's Bistro",
+        "brojMesta": 5,
+        "x": 400,
+        "y": 300
+    },
+    {
+        "id": 11,
+        "restoran": "Marko's Eatery",
+        "brojMesta": 6,
+        "x": 100,
+        "y": 150
+    },
+    {
+        "id": 12,
+        "restoran": "Marko's Eatery",
+        "brojMesta": 2,
+        "x": 150,
+        "y": 200
+    },
+    {
+        "id": 13,
+        "restoran": "Marko's Eatery",
+        "brojMesta": 4,
+        "x": 200,
+        "y": 250
+    },
+    {
+        "id": 14,
+        "restoran": "Marko's Eatery",
+        "brojMesta": 3,
+        "x": 250,
+        "y": 300
+    },
+    {
+        "id": 15,
+        "restoran": "Marko's Eatery",
+        "brojMesta": 5,
+        "x": 300,
+        "y": 350
+    },
+    {
+        "id": 16,
+        "restoran": "The Test Diner",
+        "brojMesta": 3,
+        "x": 50,
+        "y": 200
+    },
+    {
+        "id": 17,
+        "restoran": "The Test Diner",
+        "brojMesta": 4,
+        "x": 100,
+        "y": 250
+    },
+    {
+        "id": 18,
+        "restoran": "The Test Diner",
+        "brojMesta": 2,
+        "x": 50,
+        "y": 300
+    },
+    {
+        "id": 19,
+        "restoran": "The Test Diner",
+        "brojMesta": 6,
+        "x": 100,
+        "y": 350
+    },
+    {
+        "id": 20,
+        "restoran": "The Test Diner",
+        "brojMesta": 5,
+        "x": 50,
+        "y": 400
+    },
+    {
+        "id": 21,
         "restoran": "Fusion Delight",
-        "brojMesta": 5
+        "brojMesta": 5,
+        "x": 400,
+        "y": 400
+    },
+    {
+        "id": 22,
+        "restoran": "Fusion Delight",
+        "brojMesta": 3,
+        "x": 450,
+        "y": 350
+    },
+    {
+        "id": 23,
+        "restoran": "Fusion Delight",
+        "brojMesta": 2,
+        "x": 500,
+        "y": 300
+    },
+    {
+        "id": 24,
+        "restoran": "Fusion Delight",
+        "brojMesta": 6,
+        "x": 450,
+        "y": 250
+    },
+    {
+        "id": 25,
+        "restoran": "Fusion Delight",
+        "brojMesta": 4,
+        "x": 400,
+        "y": 200
     }
 ]

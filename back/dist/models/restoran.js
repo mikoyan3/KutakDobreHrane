@@ -20,6 +20,22 @@ let Restoran = new Schema({
     },
     opis: {
         type: String
+    },
+    kitchen: {
+        x: {
+            type: Number
+        },
+        y: {
+            type: Number
+        }
+    },
+    toilets: {
+        x: {
+            type: Number
+        },
+        y: {
+            type: Number
+        }
     }
 });
 exports.default = mongoose_1.default.model("Restoran", Restoran, "restoran");
