@@ -21,11 +21,17 @@ let Rezervacija = new Schema({
     komentarKonobara: {
         type: String
     },
+    konobar: {
+        type: String
+    },
     brojGostiju: {
         type: Number
     },
     id: {
         type: Number
+    },
+    restoran: {
+        type: String
     }
 });
 

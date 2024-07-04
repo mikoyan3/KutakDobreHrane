@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { restoran } from '../models/restoran';
 import { recenzija } from '../models/recenzija';
 import { jelo } from '../models/jelo';
+import { rezervacija } from '../models/rezervacija';
 
 @Injectable({
   providedIn: 'root'
@@ -75,7 +76,10 @@ export class RestoranService {
     return this.http.post("http://localhost:4000/restoran/getSlikaJelo", data, { responseType: 'arraybuffer'})
   }
 
-  layout(){
-    return this.http.get("http://localhost:4000/restoran/layout")
+  getLayoutForRestoran(rezervacija: rezervacija){
+    let data = {
+      rezervacija: rezervacija
+    }
+    return this.http.post("http://localhost:4000/restoran/getLayoutForRestoran", data)
   }
 }

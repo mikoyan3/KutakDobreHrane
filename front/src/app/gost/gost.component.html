@@ -127,7 +127,8 @@
           <td>{{ formatDate(rezervacija.datum) }}</td>
           <td>
             <span *ngIf="rezervacija.status == 'neostvarena'">Niste se pojavili u restoranu!</span>
-            <span *ngIf="!(rezervacija.komentar == '' && rezervacija.ocena == 0)">
+            <span *ngIf="rezervacija.status == 'odbijena'">Rezervacija je odbijena. <strong>Komentar restorana:</strong> {{rezervacija.komentarKonobara}}</span>
+            <span *ngIf="!(rezervacija.komentar == '' && rezervacija.ocena == 0) && rezervacija.status!='odbijena' && rezervacija.status!='neostvarena'">
               <strong>Komentar:</strong> {{ rezervacija.komentar }}
               <strong> Ocena:</strong> {{ rezervacija.ocena }} / 5
             </span>

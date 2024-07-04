@@ -56,6 +56,7 @@ restoranRouter.route("/getRecenzijeForRestoran").post((req, res) => restoranCont
 restoranRouter.route("/kreirajRezervaciju").post((req, res) => restoranController.kreirajRezervaciju(req, res));
 restoranRouter.route("/getJelaForRestoran").post((req, res) => restoranController.getJelaForRestoran(req, res));
 restoranRouter.route("/getSlikaJelo").post((req, res) => restoranController.getSlikaJelo(req, res));
+restoranRouter.route("/getLayoutForRestoran").post((req, res) => restoranController.getLayoutForRestoran(req, res));
 restoranRouter.post('/upload-layout', upload.single('layout'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const filePath = path.join(__dirname, "../../", req.file.path);
     try {
@@ -101,17 +102,6 @@ restoranRouter.post('/upload-layout', upload.single('layout'), (req, res) => __a
     }
     finally {
         fs.unlinkSync(filePath);
-    }
-}));
-restoranRouter.get('/layout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const stolovi = yield sto_1.default.find({ restoran: "Marko's Eatery" });
-        const restoran = yield restoran_1.default.findOne({ naziv: "Marko's Eatery" });
-        res.json({ restoran: restoran, stolovi: stolovi });
-    }
-    catch (error) {
-        console.error('Error fetching layout:', error);
-        res.status(500).send('Error fetching layout');
     }
 }));
 exports.default = restoranRouter;

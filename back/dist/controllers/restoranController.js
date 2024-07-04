@@ -166,6 +166,57 @@ class RestoranController {
                 console.log(err);
             });
         };
+        this.getLayoutForRestoran = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let rezervacija = req.body.rezervacija;
+                let pocetakRezervacije = new Date(rezervacija.datum);
+                let donjaGranica = pocetakRezervacije;
+                let gornjaGranica = pocetakRezervacije;
+                donjaGranica.setHours(donjaGranica.getHours() - 3);
+                if (donjaGranica.getHours() > pocetakRezervacije.getHours()) { //Ako odem u prethodni dan
+                    donjaGranica.setDate(donjaGranica.getDate() - 1);
+                }
+                gornjaGranica.setHours(gornjaGranica.getHours() + 3);
+                if (gornjaGranica.getHours() < pocetakRezervacije.getHours()) { //Ako odem u naredni dan
+                    gornjaGranica.setDate(gornjaGranica.getDate() + 1);
+                }
+                let restoran = yield restoran_1.default.findOne({ naziv: rezervacija.restoran });
+                let rezervacije = yield rezervacija_1.default.find({ restoran: restoran.naziv });
+                let preklapajuceRezervacije = [];
+                rezervacije.forEach(rez => {
+                    let datumPocetka = new Date(rez.datum);
+                    let datumKraja = new Date(rez.datum);
+                    datumKraja.setHours(datumKraja.getHours() + 3);
+                    if (!(datumPocetka >= gornjaGranica || datumKraja <= donjaGranica)) {
+                        preklapajuceRezervacije.push(rez);
+                    }
+                });
+                let stolovi = yield sto_1.default.find({ restoran: restoran.naziv });
+                let zauzetiStolovi = [];
+                let slobodniStolovi = [];
+                let flag = false;
+                stolovi.forEach(sto => {
+                    preklapajuceRezervacije.forEach(rez => {
+                        if (rez.status != "naCekanju") {
+                            if (rez.sto == sto.id) {
+                                flag = true;
+                            }
+                        }
+                    });
+                    if (flag == true) {
+                        zauzetiStolovi.push(sto);
+                        flag = false;
+                    }
+                    else {
+                        slobodniStolovi.push(sto);
+                    }
+                });
+                res.json({ restoran: restoran, zauzetiStolovi: zauzetiStolovi, slobodniStolovi: slobodniStolovi });
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
     }
     kreirajRezervaciju(req, res) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
@@ -234,8 +285,10 @@ class RestoranController {
                     opis: opis,
                     status: "naCekanju",
                     komentarKonobara: "",
+                    konobar: "",
                     brojGostiju: brojOsoba,
-                    id: maxId
+                    id: maxId,
+                    restoran: restoran
                 });
                 yield novaRezervacija.save();
                 res.json("Uspesno ste poslali zahtev za rezervacijom!");

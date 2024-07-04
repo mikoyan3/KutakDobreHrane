@@ -136,6 +136,20 @@ class UserController {
                 console.log(err);
             });
         };
+        this.updatePictureKonobar = (req, res) => {
+            const file = req.file;
+            let filename = file.originalname;
+            if (!file || !filename) {
+                console.log("Neuspeh");
+                return;
+            }
+            const URL = file.filename;
+            konobar_1.default.findOneAndUpdate({ username: req.body.username }, { $set: { pictureUrl: URL } }).then(resp => {
+                res.json(resp);
+            }).catch(err => {
+                console.log(err);
+            });
+        };
         this.promenaLozinke = (req, res) => {
             let username = req.body.username;
             let password = req.body.password;
@@ -263,6 +277,19 @@ class UserController {
                 }
             });
         };
+        this.getFileKonobar = (req, res) => {
+            const directory = path.join(__dirname, "../../uploads");
+            let username = req.body.username;
+            konobar_1.default.findOne({ username: username }).then(korisnik => {
+                const filePath = path.join(directory, korisnik.pictureUrl);
+                if (fs.existsSync(filePath)) {
+                    res.type('application/octet-stream').sendFile(filePath);
+                }
+                else {
+                    return;
+                }
+            });
+        };
     }
     registerGost(req, res) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
@@ -311,6 +338,15 @@ class UserController {
         let updatedProfile = req.body;
         let username = req.params.username;
         gost_1.default.findOneAndUpdate({ username: username }, updatedProfile, { new: true }).then(updatedUser => {
+            res.json(updatedUser);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+    updateProfileKonobar(req, res) {
+        let updatedProfile = req.body;
+        let username = req.params.username;
+        konobar_1.default.findOneAndUpdate({ username: username }, updatedProfile, { new: true }).then(updatedUser => {
             res.json(updatedUser);
         }).catch(err => {
             console.log(err);

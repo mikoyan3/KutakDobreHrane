@@ -33,13 +33,12 @@ class RezervacijeController {
                         buduceRezervacije.push(rez);
                     }
                 });
-                let stolovi = yield sto_1.default.find({});
                 let restorani = yield restoran_1.default.find({});
                 if (buduceRezervacije.length == 0) {
-                    res.json({ message: 'Nema aktuelnih rezervacija', rezervacije: [], stolovi: [], restorani: [] });
+                    res.json({ message: 'Nema aktuelnih rezervacija', rezervacije: [], restorani: [] });
                 }
                 else {
-                    res.json({ message: 'Aktuelne rezervacije postoje', rezervacije: buduceRezervacije, stolovi: stolovi, restorani: restorani });
+                    res.json({ message: 'Aktuelne rezervacije postoje', rezervacije: buduceRezervacije, restorani: restorani });
                 }
             }
             catch (err) {
@@ -51,7 +50,7 @@ class RezervacijeController {
                 let gost = req.body.gost;
                 let trenutniDatum = new Date();
                 trenutniDatum.setHours(trenutniDatum.getHours() + 2);
-                let rezervacije = yield rezervacija_1.default.find({ gost: gost, status: { $nin: ["odbijena", "naCekanju"] } });
+                let rezervacije = yield rezervacija_1.default.find({ gost: gost, status: { $nin: ["naCekanju"] } });
                 let arhiviraneRez = [];
                 rezervacije.forEach(rez => {
                     let datumRez = new Date(rez.datum);
@@ -103,6 +102,103 @@ class RezervacijeController {
             }
             else {
                 res.json("Vec postoji recenzija za datu rezervaciju!");
+            }
+        });
+        this.getNeobradjeneRezervacije = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let rezervacije = yield rezervacija_1.default.find({ status: 'naCekanju' });
+                let rezervacijeUBuducnosti = [];
+                let trenutniDatum = new Date();
+                trenutniDatum.setHours(trenutniDatum.getHours() + 2);
+                for (let rez of rezervacije) {
+                    let datumRez = new Date(rez.datum);
+                    if (!(datumRez < trenutniDatum)) {
+                        rezervacijeUBuducnosti.push(rez);
+                    }
+                }
+                let restoran = req.body.restoran;
+                let stolovi = yield sto_1.default.find({ restoran: restoran });
+                const stoIds = stolovi.map(sto => sto.id);
+                const neobradjeneRezervacije = rezervacijeUBuducnosti.filter(rezervacija => stoIds.includes(rezervacija.sto));
+                res.json(neobradjeneRezervacije);
+            }
+            catch (err) {
+                console.log(err);
+            }
+        });
+        this.getRezervacija = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let id = req.body.id;
+                let rezervacija = yield rezervacija_1.default.findOne({ id: id });
+                res.json(rezervacija);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+        this.potvrdiRezervaciju = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let rezId = req.body.rezId;
+                let sto = req.body.sto;
+                let konobar = req.body.konobar;
+                let rezervacija = yield rezervacija_1.default.findOne({ id: rezId });
+                rezervacija.sto = sto;
+                rezervacija.status = "potvrdjena";
+                rezervacija.konobar = konobar;
+                yield rezervacija.save();
+                res.json("Uspesno ste potvrdili rezervaciju!");
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+        this.odbijRezervaciju = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let komentar = req.body.komentar;
+                let rezId = req.body.rezId;
+                let kon = req.body.konobar;
+                let rezervacija = yield rezervacija_1.default.findOne({ id: rezId });
+                rezervacija.komentarKonobara = komentar;
+                rezervacija.status = "odbijena";
+                rezervacija.konobar = kon;
+                yield rezervacija.save();
+                res.json("Uspesno ste odbili rezervaciju!");
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+        this.getRezervacijeZaPotvrdu = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let konobar = req.body.konobar;
+                let trenutniDatum = new Date();
+                trenutniDatum.setHours(trenutniDatum.getHours() + 2);
+                trenutniDatum.setMinutes(trenutniDatum.getMinutes() - 30);
+                let rezervacije = yield rezervacija_1.default.find({ konobar: konobar, status: 'potvrdjena' });
+                let rezervacijeZaPotvrdu = [];
+                rezervacije.forEach(rez => {
+                    let datum = new Date(rez.datum);
+                    datum.setHours(datum.getHours() + 3);
+                    if (datum <= trenutniDatum) {
+                        rezervacijeZaPotvrdu.push(rez);
+                    }
+                });
+                res.json(rezervacijeZaPotvrdu);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+        this.potvrdiDolazak = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let rezId = req.body.rezId;
+                let rezervacija = yield rezervacija_1.default.findOne({ id: rezId });
+                rezervacija.status = "ostvarena";
+                yield rezervacija.save();
+                res.json("Uspeh!");
+            }
+            catch (error) {
+                console.log(error);
             }
         });
     }

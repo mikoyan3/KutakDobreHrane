@@ -74,23 +74,21 @@ export class GostComponent implements OnInit{
               this.aktuelneRezervacije = [];
             } else {
               rez.rezervacije.forEach(r=>{
-                rez.stolovi.forEach(s=>{
-                  rez.restorani.forEach(rst=>{
-                    if(r.sto == s.id && s.restoran == rst.naziv){
-                      let newRez: rezervacija = new rezervacija();
-                      newRez.adresa = rst.adresa;
-                      newRez.brojGostiju = r.brojGostiju;
-                      newRez.datum = r.datum;
-                      newRez.gost = r.gost;
-                      newRez.id = r.id;
-                      newRez.komentarKonobara = r.komentarKonobara;
-                      newRez.opis = r.opis;
-                      newRez.restoran = rst.naziv;
-                      newRez.status = r.status;
-                      newRez.sto = r.sto;
-                      this.aktuelneRezervacije.push(newRez);
-                    }
-                  })
+                rez.restorani.forEach(rst=>{
+                  if(r.restoran == rst.naziv){
+                    let newRez: rezervacija = new rezervacija();
+                    newRez.adresa = rst.adresa;
+                    newRez.brojGostiju = r.brojGostiju;
+                    newRez.datum = r.datum;
+                    newRez.gost = r.gost;
+                    newRez.id = r.id;
+                    newRez.komentarKonobara = r.komentarKonobara;
+                    newRez.opis = r.opis;
+                    newRez.restoran = rst.naziv;
+                    newRez.status = r.status;
+                    newRez.sto = r.sto;
+                    this.aktuelneRezervacije.push(newRez);
+                  }
                 })
               })
             }
@@ -126,8 +124,7 @@ export class GostComponent implements OnInit{
                 this.arhiviraneNarudzbine.sort((a, b) => {
                   let dateA = new Date(a.datum);
                   let dateB = new Date(b.datum);
-              
-                  return dateB.getTime() - dateA.getTime();
+                  return dateA.getTime() - dateB.getTime();
               });
               })
             })
@@ -258,7 +255,7 @@ export class GostComponent implements OnInit{
     const minutes = this.padWithZero(date.getMinutes());
     const seconds = this.padWithZero(date.getSeconds());
   
-    const formattedDate = `${month}.${day}.${year} ${hours}:${minutes}:${seconds}`;
+    const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
   
     return formattedDate;
   }

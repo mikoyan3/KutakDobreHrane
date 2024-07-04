@@ -29,12 +29,11 @@ export class RezervacijeController{
                     buduceRezervacije.push(rez);
                 }
             })
-            let stolovi = await Sto.find({});
             let restorani = await Restoran.find({});
             if(buduceRezervacije.length == 0){
-                res.json({message: 'Nema aktuelnih rezervacija', rezervacije: [], stolovi: [], restorani: []});
+                res.json({message: 'Nema aktuelnih rezervacija', rezervacije: [], restorani: []});
             } else{
-                res.json({message: 'Aktuelne rezervacije postoje', rezervacije: buduceRezervacije, stolovi: stolovi, restorani: restorani});
+                res.json({message: 'Aktuelne rezervacije postoje', rezervacije: buduceRezervacije, restorani: restorani});
             }
             
         } catch(err){
@@ -47,7 +46,7 @@ export class RezervacijeController{
             let gost = req.body.gost;
             let trenutniDatum = new Date();
             trenutniDatum.setHours(trenutniDatum.getHours() + 2);
-            let rezervacije = await Rezervacija.find({gost: gost, status: { $nin: ["odbijena", "naCekanju"]}});
+            let rezervacije = await Rezervacija.find({gost: gost, status: { $nin: ["naCekanju"]}});
             let arhiviraneRez = [];
             rezervacije.forEach(rez=>{
                 let datumRez = new Date(rez.datum);
@@ -99,6 +98,103 @@ export class RezervacijeController{
             res.json("Uspesno ste ostavili recenziju!");
         } else {
             res.json("Vec postoji recenzija za datu rezervaciju!");
+        }
+    }
+
+    getNeobradjeneRezervacije = async(req, res) => {
+        try{
+            let rezervacije = await Rezervacija.find({status: 'naCekanju'})
+            let rezervacijeUBuducnosti = []
+            let trenutniDatum = new Date();
+            trenutniDatum.setHours(trenutniDatum.getHours() + 2);
+            for(let rez of rezervacije){
+                let datumRez = new Date(rez.datum);
+                if(!(datumRez < trenutniDatum)){
+                    rezervacijeUBuducnosti.push(rez);
+                } 
+            }
+            let restoran = req.body.restoran;
+            let stolovi = await Sto.find({restoran: restoran});
+            const stoIds = stolovi.map(sto=>sto.id);
+            const neobradjeneRezervacije = rezervacijeUBuducnosti.filter(rezervacija => stoIds.includes(rezervacija.sto));
+            res.json(neobradjeneRezervacije)
+        } catch(err){
+            console.log(err);
+        }
+    }
+
+    getRezervacija = async(req, res) => {
+        try{
+            let id = req.body.id;
+            let rezervacija = await Rezervacija.findOne({id: id})
+            res.json(rezervacija)
+        } catch (error){
+            console.log(error)
+        }
+    }
+
+    potvrdiRezervaciju = async(req, res) => {
+        try{
+            let rezId = req.body.rezId;
+            let sto = req.body.sto;
+            let konobar = req.body.konobar;
+            let rezervacija = await Rezervacija.findOne({id: rezId});
+            rezervacija.sto = sto;
+            rezervacija.status = "potvrdjena";
+            rezervacija.konobar = konobar;
+            await rezervacija.save();
+            res.json("Uspesno ste potvrdili rezervaciju!")
+        } catch(error){
+            console.log(error);
+        }
+    }
+
+    odbijRezervaciju = async(req, res) => {
+        try{
+            let komentar = req.body.komentar;
+            let rezId = req.body.rezId;
+            let kon = req.body.konobar;
+            let rezervacija = await Rezervacija.findOne({id: rezId})
+            rezervacija.komentarKonobara = komentar;
+            rezervacija.status = "odbijena";
+            rezervacija.konobar = kon;
+            await rezervacija.save();
+            res.json("Uspesno ste odbili rezervaciju!");
+        } catch(error){
+            console.log(error)
+        }
+    }
+
+    getRezervacijeZaPotvrdu = async(req, res) => {
+        try{
+            let konobar = req.body.konobar;
+            let trenutniDatum = new Date();
+            trenutniDatum.setHours(trenutniDatum.getHours() + 2);
+            trenutniDatum.setMinutes(trenutniDatum.getMinutes() - 30);
+            let rezervacije = await Rezervacija.find({konobar: konobar, status: 'potvrdjena'});
+            let rezervacijeZaPotvrdu = [];
+            rezervacije.forEach(rez=>{
+                let datum = new Date(rez.datum);
+                datum.setHours(datum.getHours() + 3);
+                if(datum <= trenutniDatum) {
+                    rezervacijeZaPotvrdu.push(rez);
+                }
+            })
+            res.json(rezervacijeZaPotvrdu);
+        } catch (error){
+            console.log(error);
+        }
+    } 
+
+    potvrdiDolazak = async(req, res) => {
+        try{
+            let rezId = req.body.rezId; 
+            let rezervacija = await Rezervacija.findOne({id: rezId});
+            rezervacija.status = "ostvarena";
+            await rezervacija.save();
+            res.json("Uspeh!");
+        } catch(error){
+            console.log(error);
         }
     }
 }

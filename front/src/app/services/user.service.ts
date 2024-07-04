@@ -84,7 +84,14 @@ export class UserService {
     return this.http.post("http://localhost:4000/users/getFileGost", data, { responseType: 'arraybuffer'})
   }
 
-  private baseUrl = 'http://localhost:4000/users'; // Adjust this URL based on your backend setup
+  getFileKonobar(username: string): Observable<ArrayBuffer>{
+    let data = {
+      username: username
+    }
+    return this.http.post("http://localhost:4000/users/getFileKonobar", data, { responseType: 'arraybuffer'})
+  }
+
+  private baseUrl = 'http://localhost:4000/users'; 
 
   updateProfileGost(user: gost): Observable<any> {
     return this.http.put<gost>(`${this.baseUrl}/updateProfileGost/${user.username}`, user);
@@ -95,5 +102,16 @@ export class UserService {
     formData.append('file', file);
     formData.append('username', username)
     return this.http.post("http://localhost:4000/users/updatePictureGost", formData);
+  }
+
+  updateProfileKonobar(user: konobar): Observable<any> {
+    return this.http.put<konobar>(`${this.baseUrl}/updateProfileKonobar/${user.username}`, user);
+  }
+
+  updatePictureKonobar(username: string, file: File){
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('username', username)
+    return this.http.post("http://localhost:4000/users/updatePictureKonobar", formData);
   }
 }

@@ -9,6 +9,7 @@ import gost from "../models/gost";
 import Restoran from "../models/restoran"
 import Rezervacija from "../models/rezervacija"
 import Recenzija from "../models/recenzija"
+import rezervacija from "../models/rezervacija";
 import Sto from "../models/sto"
 import RadnoVremeRestorana from "../models/radnoVremeRestorana"
 import Jelo from "../models/jelo";
@@ -166,7 +167,7 @@ export class RestoranController{
                     const pocetakRez = new Date(rez.datum);
                     const krajRez = new Date(rez.datum);
                     krajRez.setHours(krajRez.getHours() + 3);
-                    if (!(pocetakRezervacije >= krajRez || krajRezervacije <= pocetakRez)) {
+                    if (!(pocetakRezervacije >= krajRez || krajRezervacije <= pocetakRez)) { 
                         return true; 
                     }
                     return false; 
@@ -205,8 +206,10 @@ export class RestoranController{
                     opis: opis,
                     status: "naCekanju",
                     komentarKonobara: "",
+                    konobar: "",
                     brojGostiju: brojOsoba,
-                    id: maxId
+                    id: maxId,
+                    restoran: restoran
                 })
 
                 await novaRezervacija.save();
@@ -239,5 +242,57 @@ export class RestoranController{
         }).catch(err=>{
             console.log(err);
         })
+    }
+
+    getLayoutForRestoran = async(req, res) => {
+        try{
+            let rezervacija = req.body.rezervacija;
+            let pocetakRezervacije = new Date(rezervacija.datum);
+            let donjaGranica = pocetakRezervacije;
+            let gornjaGranica = pocetakRezervacije;
+            donjaGranica.setHours(donjaGranica.getHours() - 3);
+            if (donjaGranica.getHours() > pocetakRezervacije.getHours()) { //Ako odem u prethodni dan
+                donjaGranica.setDate(donjaGranica.getDate() - 1);
+            }
+
+            gornjaGranica.setHours(gornjaGranica.getHours() + 3);
+            if (gornjaGranica.getHours() < pocetakRezervacije.getHours()) { //Ako odem u naredni dan
+                gornjaGranica.setDate(gornjaGranica.getDate() + 1);
+            }
+
+            let restoran = await Restoran.findOne({naziv: rezervacija.restoran});
+            let rezervacije = await Rezervacija.find({restoran: restoran.naziv});
+            let preklapajuceRezervacije = [];
+            rezervacije.forEach(rez=>{
+                let datumPocetka = new Date(rez.datum);
+                let datumKraja = new Date(rez.datum);
+                datumKraja.setHours(datumKraja.getHours() + 3);
+                if(!(datumPocetka >= gornjaGranica || datumKraja <= donjaGranica)){
+                    preklapajuceRezervacije.push(rez);
+                }
+            })
+            let stolovi = await Sto.find({restoran: restoran.naziv})
+            let zauzetiStolovi = []
+            let slobodniStolovi = []
+            let flag = false;
+            stolovi.forEach(sto=>{
+                preklapajuceRezervacije.forEach(rez=>{
+                    if(rez.status != "naCekanju"){
+                        if(rez.sto == sto.id) {
+                            flag = true;
+                        }
+                    }
+                })
+                if(flag == true){
+                    zauzetiStolovi.push(sto);
+                    flag = false;
+                } else {
+                    slobodniStolovi.push(sto);
+                }
+            })
+            res.json({restoran: restoran, zauzetiStolovi: zauzetiStolovi, slobodniStolovi: slobodniStolovi});
+        } catch (error){
+            console.log(error)
+        }
     }
 }

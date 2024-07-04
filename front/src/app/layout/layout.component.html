@@ -1,3 +1,30 @@
-<div class="canvas-container">
-    <canvas #canvas width="600" height="500"></canvas>
+<div class="container">
+    <div class="layout-container">
+      <div class="canvas-container">
+        <canvas #canvas width="600" height="500"></canvas>
+      </div>
+      <section *ngIf="flagCompleted == false">
+        <div class="reservation-form">
+            <h2>Informacije o rezervaciji</h2>
+            <p>Gost: {{rezervacija.gost}}</p>
+            <p>Broj gostiju: {{rezervacija.brojGostiju}}</p>
+            <div class="input-field">
+            <label for="sto">Odaberite sto:</label>
+            <select id="sto" [(ngModel)]="selectedStoId">
+                <option *ngFor="let sto of odgovarajuciStolovi" [value]="sto.id">Sto: {{sto.id}}, broj mesta za stolom: {{sto.brojMesta}}</option>
+            </select>
+            </div>
+            <div class="buttons">
+            <button (click)="potvrdiRezervaciju()">Potvrdi</button>
+            <span style="color: red;">{{message}}</span>
+            </div>
+        </div>
+      </section>
+      <section *ngIf="flagCompleted == true">
+        <div class="reservation-form">
+            <h2 style="color: green;">{{success}}</h2>
+        </div>
+      </section>
+    </div>
 </div>
+  

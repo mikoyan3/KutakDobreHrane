@@ -22,6 +22,7 @@ restoranRouter.route("/getRecenzijeForRestoran").post((req,res)=>restoranControl
 restoranRouter.route("/kreirajRezervaciju").post((req,res)=>restoranController.kreirajRezervaciju(req,res));
 restoranRouter.route("/getJelaForRestoran").post((req,res)=>restoranController.getJelaForRestoran(req,res));
 restoranRouter.route("/getSlikaJelo").post((req,res)=>restoranController.getSlikaJelo(req,res));
+restoranRouter.route("/getLayoutForRestoran").post((req,res)=>restoranController.getLayoutForRestoran(req,res));
 
 
 
@@ -79,16 +80,4 @@ restoranRouter.post('/upload-layout', upload.single('layout'), async(req, res)=>
         fs.unlinkSync(filePath);
     }
 })
-
-restoranRouter.get('/layout', async (req, res) => {
-    try {
-        const stolovi = await Sto.find({restoran: "Marko's Eatery"});
-        const restoran = await Restoran.findOne({naziv: "Marko's Eatery"});
-
-        res.json({restoran: restoran, stolovi: stolovi})
-    } catch (error) {
-        console.error('Error fetching layout:', error);
-        res.status(500).send('Error fetching layout');
-    }
-});
 export default restoranRouter;

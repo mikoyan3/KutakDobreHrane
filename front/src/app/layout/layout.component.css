@@ -8,3 +8,122 @@
 canvas {
     display: block; 
 }
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+  
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    background-color: #f7f7f7; 
+    padding: 20px; 
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+  
+.layout-container {
+    display: flex;
+    justify-content: space-between;
+}
+  
+.canvas-container {
+    flex: 2;
+}
+  
+.reservation-form {
+    flex: 1;
+    margin-left: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+  
+.reservation-form h2 {
+    border-bottom: 2px solid #8561a8;
+    padding-bottom: 5px;
+    color: #8561a8;
+}
+  
+.input-field {
+    margin-bottom: 15px;
+}
+  
+.input-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+  
+.input-field select {
+    width: calc(100% - 10px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+  
+.buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+  
+.buttons button {
+    background: #8561a8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 4px; 
+}
+  
+.buttons button:hover {
+    background: #64427a; 
+}
+  
+@media only screen and (max-width: 768px) {
+    .container {
+      width: 90%;
+    }
+  
+    .layout-container {
+      flex-direction: column;
+    }
+  
+    .buttons button {
+      padding: 8px 16px;
+    }
+  
+    .canvas-container,
+    .reservation-form {
+      margin: 0;
+    }
+  
+    .reservation-form {
+      margin-top: 20px;
+    }
+}
+  
+@media only screen and (max-width: 576px) {
+    .container {
+      padding: 15px;
+    }
+  
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  
+    .buttons button {
+      margin: 5px;
+    }
+}
+  
