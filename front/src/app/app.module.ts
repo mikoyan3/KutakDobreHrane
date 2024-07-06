@@ -16,6 +16,9 @@ import { LozinkaComponent } from './lozinka/lozinka.component';
 import { RestoranComponent } from './restoran/restoran.component';
 import { LayoutComponent } from './layout/layout.component';
 import { StatistikeComponent } from './statistike/statistike.component';
+import { AzurirajprofilComponent } from './azurirajprofil/azurirajprofil.component';
+import { DodajkonobaraComponent } from './dodajkonobara/dodajkonobara.component';
+import { DodajrestoranComponent } from './dodajrestoran/dodajrestoran.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,10 @@ import { StatistikeComponent } from './statistike/statistike.component';
     LozinkaComponent,
     RestoranComponent,
     LayoutComponent,
-    StatistikeComponent
+    StatistikeComponent,
+    AzurirajprofilComponent,
+    DodajkonobaraComponent,
+    DodajrestoranComponent
   ],
   imports: [
     BrowserModule,

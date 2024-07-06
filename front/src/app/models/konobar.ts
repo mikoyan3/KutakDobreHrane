@@ -11,4 +11,5 @@ export class konobar{
     email: string = "";
     pictureUrl: string = "";
     restoran: string = "";
+    status: string = "";
 }

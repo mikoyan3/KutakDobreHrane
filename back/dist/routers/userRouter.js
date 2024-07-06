@@ -59,5 +59,10 @@ userRouter.route("/updateProfileGost/:username").put((req, res) => userControlle
 userRouter.route("/updatePictureGost").post(upload.single('file'), userController.updatePictureGost);
 userRouter.route("/updatePictureKonobar").post(upload.single('file'), userController.updatePictureKonobar);
 userRouter.route("/updateProfileKonobar/:username").put((req, res) => userController.updateProfileKonobar(req, res));
-userRouter.route("/getInfoForStatistics").post(upload.single('file'), userController.getInfoForStatistics);
+userRouter.route("/getInfoForStatistics").post((req, res) => userController.getInfoForStatistics(req, res));
+userRouter.route("/registerKonobar").post(upload.single('file'), userController.registerKonobar);
+userRouter.route("/fetchAllInfoAdministrator").get((req, res) => userController.fetchAllInfoAdministrator(req, res));
+userRouter.route("/deaktivirajKorisnika").post((req, res) => userController.deaktivirajKorisnika(req, res));
+userRouter.route("/prihvatiKorisnika").post((req, res) => userController.prihvatiKorisnika(req, res));
+userRouter.route("/odbijKorisnika").post((req, res) => userController.odbijKorisnika(req, res));
 exports.default = userRouter;

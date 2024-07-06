@@ -1,0 +1,113 @@
+.login-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    color: #8561a8;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .input-field {
+    margin-bottom: 15px;
+  }
+  
+  .input-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .input-field input[type="text"],
+  .input-field input[type="password"],
+  .input-field input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .radio-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .radio-label {
+    display: flex;
+    align-items: center;
+  }
+  
+  .radio-label input {
+    margin-right: 5px;
+  }
+  
+  button {
+    display: block;
+    width: 100%;
+    background-color: #8561a8;
+    color: #fff;
+    padding: 10px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #64427a;
+  }
+  
+  .error-message,
+  .success-message {
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  .success-message {
+    color: green;
+  }
+  
+  @media only screen and (max-width: 1200px) {
+    .login-container {
+      max-width: 600px;
+    }
+  }
+  
+  @media only screen and (max-width: 992px) {
+    .login-container {
+      max-width: 500px;
+    }
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .login-container {
+      max-width: 400px;
+    }
+  }
+  
+  @media only screen and (max-width: 576px) {
+    .login-container {
+      max-width: 300px;
+      padding: 10px;
+    }
+  }
+  
+  @media only screen and (max-width: 375px) {
+    .login-container {
+      max-width: 250px;
+      padding: 10px;
+    }
+  }
+  

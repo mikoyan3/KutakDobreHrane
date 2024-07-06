@@ -41,6 +41,9 @@ let Konobar = new Schema({
     },
     restoran: {
         type: String
+    },
+    status: {
+        type: String
     }
 });
 exports.default = mongoose_1.default.model("Konobar", Konobar, "konobar");

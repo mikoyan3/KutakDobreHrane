@@ -82,4 +82,17 @@ export class RestoranService {
     }
     return this.http.post("http://localhost:4000/restoran/getLayoutForRestoran", data)
   }
+
+  uploadRestoran(pocetakRadnogVremena: string, krajRadnogVremena: string, naziv: string, adresa: string, tip: string, telefon: string, opis: string, file: File): Observable<any>{
+    const formData = new FormData();
+    formData.append('layout', file, file.name);
+    formData.append('pocetakRadnogVremena', pocetakRadnogVremena);
+    formData.append('krajRadnogVremena', krajRadnogVremena);
+    formData.append('naziv', naziv);
+    formData.append('adresa', adresa);
+    formData.append('tip', tip);
+    formData.append('telefon', telefon);
+    formData.append('opis', opis);
+    return this.http.post("http://localhost:4000/restoran/upload-layout", formData);
+  }
 }

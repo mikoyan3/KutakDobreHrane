@@ -11,6 +11,9 @@ import { LozinkaComponent } from './lozinka/lozinka.component';
 import { RestoranComponent } from './restoran/restoran.component';
 import { LayoutComponent } from './layout/layout.component';
 import { StatistikeComponent } from './statistike/statistike.component';
+import { AzurirajprofilComponent } from './azurirajprofil/azurirajprofil.component';
+import { DodajkonobaraComponent } from './dodajkonobara/dodajkonobara.component';
+import { DodajrestoranComponent } from './dodajrestoran/dodajrestoran.component';
 
 const routes: Routes = [
   { path: "", component: PocetnaComponent },
@@ -23,7 +26,10 @@ const routes: Routes = [
   { path: "lozinka/:type", component: LozinkaComponent},
   { path: "restoran", component: RestoranComponent},
   { path: "layout", component: LayoutComponent},
-  { path: "statistike", component: StatistikeComponent}
+  { path: "statistike", component: StatistikeComponent},
+  { path: "azurirajprofil", component: AzurirajprofilComponent},
+  { path: "dodajKonobara", component: DodajkonobaraComponent},
+  { path: "dodajRestoran", component: DodajrestoranComponent}
 ];
 
 @NgModule({

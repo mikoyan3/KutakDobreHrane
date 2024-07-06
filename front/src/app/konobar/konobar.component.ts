@@ -16,12 +16,6 @@ import { NarudzbinaService } from '../services/narudzbina.service';
   styleUrls: ['./konobar.component.css']
 })
 export class KonobarComponent implements OnInit{
-  @ViewChild('histogram') histogramChart: ElementRef;
-  @ViewChild('column') columnChart: ElementRef;
-  @ViewChild('pie') pieChart: ElementRef;
-  chartHistogram: any;
-  chartColumn: any;
-  chartPie: any;
   korisnik: konobar;
   fileDownloaded: SafeUrl | null = null;
   fileForUpload: File | null = null;

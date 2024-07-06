@@ -38,6 +38,9 @@ let Konobar = new Schema({
     },
     restoran: {
         type: String
+    },
+    status: {
+        type: String
     }
 });
 

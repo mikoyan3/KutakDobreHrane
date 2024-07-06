@@ -1,0 +1,35 @@
+<div class="login-container">
+    <h2>Dodavanje restorana</h2>
+    <div class="input-field">
+      <label for="naziv">Naziv</label>
+      <input type="text" id="naziv" [(ngModel)]="naziv">
+    </div>
+    <div class="input-field">
+      <label for="adresa">Adresa</label>
+      <input type="text" id="adresa" [(ngModel)]="adresa">
+    </div>
+    <div class="input-field">
+      <label for="tip">Tip kuhinje</label>
+      <input type="text" id="tip" [(ngModel)]="tip">
+    </div>
+    <div class="input-field">
+      <label for="telefon">Telefon</label>
+      <input type="text" id="telefon" [(ngModel)]="telefon">
+    </div>
+    <div class="input-field">
+        <label for="opis">Opis</label>
+        <input type="text" id="opis" [(ngModel)]="opis">
+    </div>
+    <div class="input-field">
+        <label for="pocetakRadnogVremena">Pocetak radnog vremena</label>
+        <input type="time" id="pocetakRadnogVremena" [(ngModel)]="pocetakRadnogVremena">
+    </div>
+    <div class="input-field">
+        <label for="krajRadnogVremena">Kraj radnog vremena</label>
+        <input type="time" id="krajRadnogVremena" [(ngModel)]="krajRadnogVremena">
+    </div>
+    <input type="file" (change)="onFileSelected($event)" accept=".json">
+    <button (click)="register()">Dodaj</button>
+    <div class="error-message">{{errorMessage}}</div>
+  </div>
+  

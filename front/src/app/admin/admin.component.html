@@ -1,10 +1,134 @@
 <div class="container">
-    <h2>Upload Layout</h2>
-    <form (ngSubmit)="uploadLayout()" enctype="multipart/form-data">
-      <input type="file" (change)="onFileSelected($event)" accept=".json">
-      <button type="submit">Upload Layout</button>
-    </form>
-  
-    <hr>
-  </div>
+  <header>
+      <h1>Administrator dashboard</h1>
+      <div class="buttons">
+          <button (click)="gosti()">Gosti</button>
+          <button (click)="konobariB()">Konobari</button>
+          <button (click)="restoraniB()">Restorani</button>
+          <button (click)="dodajKonobara()">Dodaj konobara</button>
+          <button (click)="dodajRestoran()">Dodaj restoran</button>
+      </div>
+  </header>
+  <section *ngIf="gostiFlag == true" class="restaurant-list">
+    <h2>Lista aktivnih gostiju</h2>
+    <table>
+      <thead>
+          <tr>
+              <th>Korisnicko ime</th>
+              <th>Ime</th>
+              <th>Prezime</th>
+              <th>Adresa</th>
+              <th>Broj telefona</th>
+              <th>E-mail</th>
+              <th>Akcija</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let gost of odobreniGosti">
+              <td>{{ gost.username }}</td>
+              <td>{{ gost.name }}</td>
+              <td>{{ gost.surname }}</td>
+              <td>{{ gost.address }}</td>
+              <td>{{ gost.phoneNumber }}</td>
+              <td>{{ gost.email }}</td>
+              <td class="buttonDisplay">
+                  <button (click)="azurirajGost(gost)">Azuriraj podatke</button>
+              </td>
+          </tr>
+      </tbody>
+    </table>
+    <h2>Lista zahteva za registracijom</h2>
+    <table>
+      <thead>
+          <tr>
+              <th>Korisnicko ime</th>
+              <th>Ime</th>
+              <th>Prezime</th>
+              <th>Adresa</th>
+              <th>Broj telefona</th>
+              <th>E-mail</th>
+              <th>Broj kartice</th>
+              <th>Akcija</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let gost of zahteviGosti">
+              <td>{{ gost.username }}</td>
+              <td>{{ gost.name }}</td>
+              <td>{{ gost.surname }}</td>
+              <td>{{ gost.address }}</td>
+              <td>{{ gost.phoneNumber }}</td>
+              <td>{{ gost.email }}</td>
+              <td>{{ gost.creditCardNumber }}</td>
+              <td class="buttonDisplay">
+                  <button (click)="potvrdi(gost.username)">Potvrdi</button>
+                  <button (click)="odbij(gost.username)">Odbij</button>
+              </td>
+          </tr>
+      </tbody>
+    </table>
+  </section>
+  <section *ngIf="konobariFlag == true" class="restaurant-list">
+    <h2>Lista aktivnih konobara</h2>
+    <table>
+      <thead>
+          <tr>
+              <th>Korisnicko ime</th>
+              <th>Ime</th>
+              <th>Prezime</th>
+              <th>Adresa</th>
+              <th>Broj telefona</th>
+              <th>E-mail</th>
+              <th>Restoran</th>
+              <th>Akcija</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let konobar of konobari">
+              <td>{{ konobar.username }}</td>
+              <td>{{ konobar.name }}</td>
+              <td>{{ konobar.surname }}</td>
+              <td>{{ konobar.address }}</td>
+              <td>{{ konobar.phoneNumber }}</td>
+              <td>{{ konobar.email }}</td>
+              <td>{{ konobar.restoran }}</td>
+              <td class="buttonDisplay">
+                  <button (click)="azurirajKonobar(konobar)">Azuriraj podatke</button>
+              </td>
+          </tr>
+      </tbody>
+    </table>
+  </section>
+  <section *ngIf="restoraniFlag == true" class="restaurant-list">
+    <h2>Lista svih restorana</h2>
+    <table>
+      <thead>
+          <tr>
+              <th>Naziv</th>
+              <th>Adresa</th>
+              <th>Tip restorana</th>
+              <th>Telefon</th>
+              <th>Opis</th>
+              <th>Konobari</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let restoran of restorani">
+              <td>{{ restoran.naziv }}</td>
+              <td>{{ restoran.adresa }}</td>
+              <td>{{ restoran.tip }}</td>
+              <td>{{ restoran.telefon }}</td>
+              <td>{{ restoran.opis }}</td>
+              <td>
+                  <ul>
+                      <li *ngFor="let konobar of getKonobariForRestoran(restoran)">
+                          {{ konobar.name }} {{ konobar.surname }}
+                      </li>
+                  </ul>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+  </section>
+</div>
   

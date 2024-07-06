@@ -42,7 +42,9 @@ const gost_1 = __importDefault(require("../models/gost"));
 const konobar_1 = __importDefault(require("../models/konobar"));
 const admin_1 = __importDefault(require("../models/admin"));
 const rezervacija_1 = __importDefault(require("../models/rezervacija"));
+const restoran_1 = __importDefault(require("../models/restoran"));
 const gost_2 = __importDefault(require("../models/gost"));
+const konobar_2 = __importDefault(require("../models/konobar"));
 const bcrypt = require('bcrypt');
 class UserController {
     constructor() {
@@ -68,8 +70,11 @@ class UserController {
                             else if (korisnik.status == "neodobren") {
                                 res.json({ userType: 'Korisnik nije odobren!', user: korisnik });
                             }
-                            else {
+                            else if (korisnik.status == "odbijen") {
                                 res.json({ userType: 'Zahtev za registracijom korisnika je odbijen!', user: korisnik });
+                            }
+                            else {
+                                res.json({ userType: "Korisnik je deaktiviran", user: korisnik });
                             }
                         }
                         else {
@@ -95,7 +100,12 @@ class UserController {
                             passwordMatch = (password == storedPassword);
                         }
                         if (passwordMatch) {
-                            res.json({ userType: 'konobar', user: korisnik });
+                            if (korisnik.status == "odobren") {
+                                res.json({ userType: 'konobar', user: korisnik });
+                            }
+                            else {
+                                res.json({ userType: "Korisnik je deaktiviran", user: korisnik });
+                            }
                         }
                         else {
                             res.json({ userType: 'Lozinka je pogresna!', user: null });
@@ -259,7 +269,7 @@ class UserController {
             });
         };
         this.getAllKonobari = (req, res) => {
-            konobar_1.default.find({}).then(rez => {
+            konobar_1.default.find({ status: "odobren" }).then(rez => {
                 res.json(rez);
             }).catch(err => {
                 console.log(err);
@@ -418,18 +428,122 @@ class UserController {
                 console.log(error);
             }
         });
+        this.fetchAllInfoAdministrator = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let konobari = yield konobar_1.default.find({ status: "odobren" });
+                let odobreniGosti = yield gost_1.default.find({ status: "odobren" });
+                let zahteviGosti = yield gost_1.default.find({ status: "neodobren" });
+                let restorani = yield restoran_1.default.find({});
+                res.json({ konobari: konobari, odobreniGosti: odobreniGosti, zahteviGosti: zahteviGosti, restorani: restorani });
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+        this.deaktivirajKorisnika = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let tip = req.body.tip;
+                let korisnik = req.body.korisnik;
+                if (tip == 'gost') {
+                    let gost = yield gost_1.default.findOne({ username: korisnik });
+                    gost.status = "deaktiviran";
+                    yield gost.save();
+                    res.json("Uspeh");
+                }
+                else {
+                    let konobar = yield konobar_1.default.findOne({ username: korisnik });
+                    konobar.status = "deaktiviran";
+                    yield konobar.save();
+                    res.json("Uspeh");
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+        this.prihvatiKorisnika = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let korisnik = req.body.korisnik;
+                let gost = yield gost_1.default.findOne({ username: korisnik });
+                gost.status = "odobren";
+                yield gost.save();
+                res.json("Uspeh");
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+        this.odbijKorisnika = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let korisnik = req.body.korisnik;
+                let gost = yield gost_1.default.findOne({ username: korisnik });
+                gost.status = "odbijen";
+                yield gost.save();
+                res.json("Uspeh");
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
+    registerKonobar(req, res) {
+        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let username = req.body.username;
+                const postojiKon = yield konobar_1.default.findOne({ username: username });
+                const postojiGos = yield gost_1.default.findOne({ username: username });
+                if (postojiKon || postojiGos) {
+                    res.json("Korisnik vec postoji");
+                    return resolve();
+                }
+                const postojiMailKon = yield konobar_1.default.findOne({ email: req.body.email });
+                const postojiMailGos = yield gost_1.default.findOne({ email: req.body.email });
+                if (postojiMailGos || postojiMailKon) {
+                    res.json("Korisnik sa ovim mail-om vec postoji!");
+                    return resolve();
+                }
+                const file = req.file;
+                const filename = file ? file.originalname : null;
+                const profilePictureUrl = filename || "placeholder.jpg";
+                const hashedPassword = yield bcrypt.hash(req.body.password, 10);
+                const user = new konobar_2.default({
+                    username: req.body.username,
+                    password: hashedPassword,
+                    securityQuestion: req.body.securityQuestion,
+                    securityAnswer: req.body.securityAnswer,
+                    name: req.body.name,
+                    surname: req.body.surname,
+                    gender: req.body.gender,
+                    address: req.body.address,
+                    phoneNumber: req.body.phoneNumber,
+                    email: req.body.email,
+                    pictureUrl: profilePictureUrl,
+                    restoran: req.body.restoran,
+                    status: "odobren"
+                });
+                yield user.save();
+                res.json("Uspesno ste poslali zahtev za registracijom!");
+                resolve();
+            }
+            catch (error) {
+                console.log("Neuspeh");
+                reject(error);
+            }
+        }));
     }
     registerGost(req, res) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
                 let username = req.body.username;
-                const postoji = yield gost_1.default.findOne({ username: username });
-                if (postoji) {
+                const postojiKon = yield konobar_1.default.findOne({ username: username });
+                const postojiGos = yield gost_1.default.findOne({ username: username });
+                if (postojiKon || postojiGos) {
                     res.json("Korisnik vec postoji");
                     return resolve();
                 }
-                const postojiMail = yield gost_1.default.findOne({ email: req.body.email });
-                if (postojiMail) {
+                const postojiMailKon = yield konobar_1.default.findOne({ email: req.body.email });
+                const postojiMailGos = yield gost_1.default.findOne({ email: req.body.email });
+                if (postojiMailGos || postojiMailKon) {
                     res.json("Korisnik sa ovim mail-om vec postoji!");
                     return resolve();
                 }

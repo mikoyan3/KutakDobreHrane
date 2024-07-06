@@ -6,7 +6,9 @@ import Gost from "../models/gost"
 import Konobar from "../models/konobar";
 import Admin from "../models/admin"
 import Rezervacija from "../models/rezervacija"
+import Restoran from "../models/restoran"
 import gost from "../models/gost";
+import konobar from "../models/konobar";
 const bcrypt = require('bcrypt');
 
 export class UserController{
@@ -30,8 +32,10 @@ export class UserController{
                         res.json({userType: 'gost', user: korisnik});
                     } else if(korisnik.status == "neodobren"){
                         res.json({userType: 'Korisnik nije odobren!', user: korisnik});
-                    } else{
+                    } else if(korisnik.status == "odbijen"){
                         res.json({userType: 'Zahtev za registracijom korisnika je odbijen!', user: korisnik});
+                    } else {
+                        res.json({userType: "Korisnik je deaktiviran", user: korisnik});
                     }
                 } else {
                     res.json({userType: 'Lozinka je pogresna!', user: null})
@@ -53,7 +57,11 @@ export class UserController{
                     passwordMatch = (password == storedPassword);
                 }
                 if(passwordMatch){
-                    res.json({userType: 'konobar', user: korisnik})
+                    if(korisnik.status == "odobren"){
+                        res.json({userType: 'konobar', user: korisnik})
+                    }else{
+                        res.json({userType: "Korisnik je deaktiviran", user: korisnik});
+                    }
                 } else {
                     res.json({userType: 'Lozinka je pogresna!', user: null})
                 }
@@ -80,17 +88,65 @@ export class UserController{
         })
     }
 
+    registerKonobar(req: express.Request, res: express.Response): Promise<void>{
+        return new Promise<void>(async (resolve, reject) => {
+            try{
+                let username = req.body.username;
+                const postojiKon = await Konobar.findOne({username: username});
+                const postojiGos = await Gost.findOne({username: username});
+                if(postojiKon || postojiGos){
+                    res.json("Korisnik vec postoji");
+                    return resolve();
+                }
+                const postojiMailKon = await Konobar.findOne({email: req.body.email});
+                const postojiMailGos = await Gost.findOne({email: req.body.email});
+                if(postojiMailGos || postojiMailKon){
+                    res.json("Korisnik sa ovim mail-om vec postoji!")
+                    return resolve();
+                }
+                const file: Express.Multer.File = (req as Request).file;
+                const filename: string = file ? file.originalname : null;
+                const profilePictureUrl = filename || "placeholder.jpg";
+
+                const hashedPassword = await bcrypt.hash(req.body.password, 10);
+                const user = new konobar({
+                    username: req.body.username,
+                    password: hashedPassword,
+                    securityQuestion: req.body.securityQuestion,
+                    securityAnswer: req.body.securityAnswer,
+                    name: req.body.name,
+                    surname: req.body.surname,
+                    gender: req.body.gender,
+                    address: req.body.address,
+                    phoneNumber: req.body.phoneNumber,
+                    email: req.body.email,
+                    pictureUrl: profilePictureUrl,
+                    restoran: req.body.restoran,
+                    status: "odobren"
+                });
+                await user.save();
+                res.json("Uspesno ste poslali zahtev za registracijom!");
+                resolve();
+            } catch(error){
+                console.log("Neuspeh");
+                reject(error);
+            } 
+        });
+    }
+
     registerGost(req: express.Request, res: express.Response): Promise<void>{
         return new Promise<void>(async (resolve, reject) => {
             try{
                 let username = req.body.username;
-                const postoji = await Gost.findOne({username: username});
-                if(postoji){
+                const postojiKon = await Konobar.findOne({username: username});
+                const postojiGos = await Gost.findOne({username: username});
+                if(postojiKon || postojiGos){
                     res.json("Korisnik vec postoji");
                     return resolve();
                 }
-                const postojiMail = await Gost.findOne({email: req.body.email})
-                if(postojiMail){
+                const postojiMailKon = await Konobar.findOne({email: req.body.email});
+                const postojiMailGos = await Gost.findOne({email: req.body.email});
+                if(postojiMailGos || postojiMailKon){
                     res.json("Korisnik sa ovim mail-om vec postoji!")
                     return resolve();
                 }
@@ -256,7 +312,7 @@ export class UserController{
     }
 
     getAllKonobari = (req: express.Request, res: express.Response)=>{
-        Konobar.find({}).then(rez=>{
+        Konobar.find({status: "odobren"}).then(rez=>{
             res.json(rez);
         }).catch(err=>{
             console.log(err);
@@ -442,6 +498,62 @@ export class UserController{
             res.json({dijagramKolona: weeklyGosti, dijagramPita: formatedGostiPoKonobaru, dijagramHistogram: daniAvg});
         } catch (error){
             console.log(error);
+        }
+    }
+
+    fetchAllInfoAdministrator = async(req, res)=>{
+        try{
+            let konobari = await Konobar.find({status: "odobren"});
+            let odobreniGosti = await Gost.find({status: "odobren"});
+            let zahteviGosti = await Gost.find({status: "neodobren"});
+            let restorani = await Restoran.find({});
+            res.json({konobari: konobari, odobreniGosti: odobreniGosti, zahteviGosti: zahteviGosti, restorani: restorani});
+        } catch(error){
+            console.log(error);
+        }
+    }
+
+    deaktivirajKorisnika = async(req, res)=>{
+        try{
+            let tip = req.body.tip;
+            let korisnik = req.body.korisnik;
+            if(tip == 'gost'){
+                let gost = await Gost.findOne({username: korisnik});
+                gost.status = "deaktiviran";
+                await gost.save();
+                res.json("Uspeh")
+            } else {
+                let konobar = await Konobar.findOne({username: korisnik});
+                konobar.status = "deaktiviran";
+                await konobar.save();
+                res.json("Uspeh");
+            }
+        } catch(error){
+            console.log(error);
+        }
+    }
+
+    prihvatiKorisnika = async(req, res)=>{
+        try{
+            let korisnik = req.body.korisnik;
+            let gost = await Gost.findOne({username: korisnik});
+            gost.status = "odobren";
+            await gost.save();
+            res.json("Uspeh");
+        } catch(error){
+            console.log(error)
+        }
+    }
+
+    odbijKorisnika = async(req, res)=>{
+        try{
+            let korisnik = req.body.korisnik;
+            let gost = await Gost.findOne({username: korisnik});
+            gost.status = "odbijen";
+            await gost.save();
+            res.json("Uspeh");
+        } catch(error){
+            console.log(error)
         }
     }
 }

@@ -45,6 +45,23 @@ export class UserService {
     return this.http.post<string>("http://localhost:4000/users/registerGost", formData);
   }
 
+  registerKonobar(username: string, password: string, securityQuestion: string, securityAnswer: string, name: string, surname: string, gender: string, address: string, phoneNumber: string, email: string, file: File, restoran: string): Observable<any>{
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('username', username);
+    formData.append('password', password);
+    formData.append('securityQuestion', securityQuestion);
+    formData.append('securityAnswer', securityAnswer);
+    formData.append('name', name);
+    formData.append('surname', surname);
+    formData.append('gender', gender);
+    formData.append('address', address);
+    formData.append('phoneNumber', phoneNumber);
+    formData.append('email', email);
+    formData.append('restoran', restoran);
+    return this.http.post<string>("http://localhost:4000/users/registerKonobar", formData);
+  }
+
   promenaLozinke(username: string, password: string, newPassword: string){
     let data = {
       username: username,
@@ -121,5 +138,31 @@ export class UserService {
       restoran: restoran
     }
     return this.http.post("http://localhost:4000/users/getInfoForStatistics", data);
+  }
+
+  fetchAllInfoAdministrator(){
+    return this.http.get("http://localhost:4000/users/fetchAllInfoAdministrator");
+  }
+
+  deaktivirajKorisnika(tip: string, korisnik: string){
+    let data = {
+      tip: tip,
+      korisnik: korisnik
+    }
+    return this.http.post<string>("http://localhost:4000/users/deaktivirajKorisnika", data);
+  }
+
+  prihvatiKorisnika(korisnik: string){
+    let data = {
+      korisnik: korisnik
+    }
+    return this.http.post<string>("http://localhost:4000/users/prihvatiKorisnika", data);
+  }
+
+  odbijKorisnika(korisnik: string){
+    let data = {
+      korisnik: korisnik
+    }
+    return this.http.post<string>("http://localhost:4000/users/odbijKorisnika", data);
   }
 }

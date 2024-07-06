@@ -4,6 +4,7 @@ import multer from "multer";
 import * as fs from "fs";
 import Restoran from "../models/restoran"
 import Sto from "../models/sto"
+import radnoVremeRestorana from "../models/radnoVremeRestorana";
 
 const path = require('path');
 const restoranRouter = express.Router();
@@ -32,26 +33,24 @@ restoranRouter.post('/upload-layout', upload.single('layout'), async(req, res)=>
     try{
         const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
         const restoranData = data.restoran;
-        const restoranNaziv = restoranData.naziv;
-
-        let restoran = await Restoran.findOne({ naziv: restoranNaziv });
-
-        if (restoran) {
-            restoran.kitchen = restoranData.kitchen;
-            restoran.toilets = restoranData.toilets;
-            await restoran.save();
-        } else {
-            restoran = new Restoran({
-                naziv: restoranData.naziv,
-                adresa: restoranData.adresa,
-                tip: restoranData.tip,
-                telefon: restoranData.telefon,
-                opis: restoranData.opis,
-                kitchen: restoranData.kitchen,
-                toilets: restoranData.toilets
-            });
-            await restoran.save();
-        }
+        let pocetak = req.body.pocetakRadnogVremena;
+        let kraj = req.body.krajRadnogVremena;
+        let radnoVreme = new radnoVremeRestorana({
+            restoran: req.body.naziv,
+            pocetak: pocetak,
+            kraj: kraj
+        });
+        await radnoVreme.save();
+        let restoran = new Restoran({
+            naziv: req.body.naziv,
+            adresa: req.body.adresa,
+            tip: req.body.tip,
+            telefon: req.body.telefon,
+            opis: req.body.opis,
+            kitchen: restoranData.kitchen,
+            toilets: restoranData.toilets
+        });
+        await restoran.save();
 
         const stolovi = await Sto.find({});
         let nextId = 0;
@@ -61,21 +60,20 @@ restoranRouter.post('/upload-layout', upload.single('layout'), async(req, res)=>
             }
         })
         nextId = nextId + 1;
-        await Sto.deleteMany({ restoran: restoranNaziv });
 
         const tablePromises = data.tables.map(table => {
             return new Sto({
                 ...table,
-                restoran: restoranNaziv,
+                restoran: req.body.naziv,
                 id: nextId++
             }).save();
         });
         await Promise.all(tablePromises);
 
-        res.status(200).send('Layout uploaded successfully');
+        res.json("Uspesno dodat restoran")
     } catch (error){
         console.error('Desila se greska');
-        res.status(500).send('Desila se greska');
+        res.json("Desila se greska");
     } finally {
         fs.unlinkSync(filePath);
     }
