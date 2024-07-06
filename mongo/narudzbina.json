@@ -1,5 +1,6 @@
 [
-    {
+    {	
+        "id": 1,
         "restoran": "Restoran Pavle",
         "status": "naCekanju",
         "minVremeDostave": 20,
@@ -20,7 +21,8 @@
         ],
         "cena": 1700
     },
-    {
+    {	
+        "id": 2,
         "restoran": "Ilija's Bistro",
         "status": "potvrdjena",
         "minVremeDostave": 30,
@@ -36,7 +38,8 @@
         ],
         "cena": 700
     },
-    {
+    {	
+        "id": 3,
         "restoran": "Marko's Eatery",
         "status": "odbijena",
         "minVremeDostave": 50,
@@ -52,7 +55,8 @@
         ],
         "cena": 1800
     },
-    {
+    {	
+        "id": 4,
         "restoran": "The Test Diner",
         "status": "naCekanju",
         "minVremeDostave": 20,
@@ -68,7 +72,8 @@
         ],
         "cena": 1600
     },
-    {
+    {	
+        "id": 5,
         "restoran": "Fusion Delight",
         "status": "potvrdjena",
         "minVremeDostave": 50,

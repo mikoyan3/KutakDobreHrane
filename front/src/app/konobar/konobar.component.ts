@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { konobar } from '../models/konobar';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { last, lastValueFrom } from 'rxjs';
@@ -6,6 +6,8 @@ import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { rezervacija } from '../models/rezervacija';
 import { RezervacijeService } from '../services/rezervacije.service';
+import { narudzbina } from '../models/narudzbina';
+import { NarudzbinaService } from '../services/narudzbina.service';
 
 
 @Component({
@@ -14,6 +16,12 @@ import { RezervacijeService } from '../services/rezervacije.service';
   styleUrls: ['./konobar.component.css']
 })
 export class KonobarComponent implements OnInit{
+  @ViewChild('histogram') histogramChart: ElementRef;
+  @ViewChild('column') columnChart: ElementRef;
+  @ViewChild('pie') pieChart: ElementRef;
+  chartHistogram: any;
+  chartColumn: any;
+  chartPie: any;
   korisnik: konobar;
   fileDownloaded: SafeUrl | null = null;
   fileForUpload: File | null = null;
@@ -24,21 +32,44 @@ export class KonobarComponent implements OnInit{
   telefon: string;
   successMessage: string = "";
   errorMessage: string = "";
-  flagProfil: boolean = true;
+  flagProfil: boolean = false;
   flagRezervacije: boolean = false;
+  flagNarudzbine: boolean = false;
+  flagStatistika: boolean = true;
+  narudzbine: narudzbina[] = [];
   neobradjeneRezervacije: rezervacija[] = [];
   komentar: string = "";
   errorKomentar: string = "";
   odbijFlag: boolean = false;
   rezervacijeZaPotvrdu: rezervacija[] = [];
+  checkBoxFlag: boolean = false;
+  minvreme: number = -1;
+  errorVreme: string = "";
+  dijagramKolona: any[] = [];
+  dijagramPita: any[] = [];
+  dijagramHistogram: any[] = [];
+  broj: number = 0;
 
-  constructor(private userService: UserService, private sanitizer: DomSanitizer, private router: Router, private rezervacijaService: RezervacijeService){}
+  constructor(private userService: UserService, private sanitizer: DomSanitizer, private router: Router, private rezervacijaService: RezervacijeService, private narudzbineService: NarudzbinaService){}
 
   async ngOnInit(){
     this.successMessage = "";
     this.errorMessage = "";
     this.errorKomentar = "";
     this.odbijFlag = false;
+    this.checkBoxFlag = false;
+    this.minvreme = -1;
+    this.errorVreme = "";
+    let br = localStorage.getItem('flag');
+    if(br != null) this.broj = JSON.parse(br);
+    if(this.broj == 1 || this.broj == 0){
+      this.profil()
+    } else if (this.broj == 2){
+      this.rezervacije();
+    } else {
+      this.dostave();
+    }
+    localStorage.removeItem('flag');
     let usr = localStorage.getItem('ulogovan');
     if(usr != null) this.korisnik = JSON.parse(usr);
     this.ime = this.korisnik.name;
@@ -60,11 +91,21 @@ export class KonobarComponent implements OnInit{
         return dateA.getTime() - dateB.getTime();
       });
       this.rezervacijeZaPotvrdu = await lastValueFrom(this.rezervacijaService.getRezervacijeZaPotvrdu(this.korisnik.username));
+      let narudzbineTren = await lastValueFrom(this.narudzbineService.getTrenutneNarudzbine(this.korisnik.restoran));
+      for(let narudzbina of narudzbineTren){
+        for(let deo of narudzbina.deoNarudzbine){
+          let jelo = await lastValueFrom(this.narudzbineService.getJelo(deo.jelo));
+          deo.jeloObjekat = jelo;
+        }
+      }
+      this.narudzbine = narudzbineTren;
     } catch (error){
       console.log(error)
     }
   }
 
+  
+  
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
     const reader = new FileReader();
@@ -118,11 +159,26 @@ export class KonobarComponent implements OnInit{
   profil() {
     this.flagProfil = true;
     this.flagRezervacije = false;
+    this.flagNarudzbine = false;
+    this.flagStatistika = false;
   }
 
   rezervacije() {
     this.flagProfil = false;
     this.flagRezervacije = true;
+    this.flagNarudzbine = false;
+    this.flagStatistika = false;
+  }
+
+  dostave() {
+    this.flagProfil = false;
+    this.flagRezervacije = false;
+    this.flagNarudzbine = true;
+    this.flagStatistika = false;
+  }
+
+  statistika(){
+    this.router.navigate(['statistike']);
   }
 
 
@@ -176,6 +232,48 @@ export class KonobarComponent implements OnInit{
     try{
       let str = await lastValueFrom(this.rezervacijaService.potvrdiDolazak(id));
       this.ngOnInit();
+    } catch(error){
+      console.log(error)
+    }
+  }
+
+  async odbijDolazak(id: number){
+    try{
+      let str = await lastValueFrom(this.rezervacijaService.odbijDolazak(id));
+      this.ngOnInit();
+    } catch(error){
+      console.log(error)
+    }
+  }
+
+  async odbijNarudzbinu(id: number){
+    try{
+      let str = await lastValueFrom(this.narudzbineService.odbijNarudzbinu(id));
+      this.ngOnInit();
+    } catch(error){
+      console.log(error)
+    }
+  }
+
+  prikaziCheckBox(){
+    this.checkBoxFlag = true;
+  }
+
+  async potvrdiNarudzbinu(id: number){
+    try{
+      if(this.minvreme == -1){
+        this.errorVreme = "Morate odabrati opciju za procenjeno vreme dostave!"
+      } else {
+        this.errorVreme = "";
+        if(this.minvreme == 20){
+          let str = await lastValueFrom(this.narudzbineService.potvrdiNarudzbinu(id, 20, 30));
+        } else if (this.minvreme == 30){
+          let str = await lastValueFrom(this.narudzbineService.potvrdiNarudzbinu(id, 30, 40));
+        } else {
+          let str = await lastValueFrom(this.narudzbineService.potvrdiNarudzbinu(id, 50, 60));
+        }
+        this.ngOnInit()
+      }
     } catch(error){
       console.log(error)
     }

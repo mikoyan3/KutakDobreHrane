@@ -114,4 +114,12 @@ export class UserService {
     formData.append('username', username)
     return this.http.post("http://localhost:4000/users/updatePictureKonobar", formData);
   }
+
+  getInfoForStatistics(konobar: string, restoran: string){
+    let data = {
+      konobar: konobar,
+      restoran: restoran
+    }
+    return this.http.post("http://localhost:4000/users/getInfoForStatistics", data);
+  }
 }

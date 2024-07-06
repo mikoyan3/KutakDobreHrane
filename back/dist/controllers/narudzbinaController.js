@@ -13,13 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NarudzbinaController = void 0;
+const jelo_1 = __importDefault(require("../models/jelo"));
 const narudzbina_1 = __importDefault(require("../models/narudzbina"));
 const deoNarudzbine_1 = __importDefault(require("../models/deoNarudzbine"));
 const narudzbina_2 = __importDefault(require("../models/narudzbina"));
 const bcrypt = require('bcrypt');
 class NarudzbinaController {
     constructor() {
-        this.generisiNovuNarudzbinu = (req, res) => {
+        this.generisiNovuNarudzbinu = (req, res) => __awaiter(this, void 0, void 0, function* () {
             let delovi = req.body.delovi;
             let restoran = req.body.restoran;
             let status = "naCekanju";
@@ -39,7 +40,17 @@ class NarudzbinaController {
                 deloviNarudzbine.push(dn);
                 cena += deo.cena;
             });
+            let maxId = 0;
+            yield narudzbina_1.default.find({}).then(rez => {
+                rez.forEach(r => {
+                    if (r.id > maxId) {
+                        maxId = r.id;
+                    }
+                });
+            });
+            maxId = maxId + 1;
             let nar = new narudzbina_2.default({
+                id: maxId,
                 restoran: restoran,
                 status: status,
                 minVremeDostave: minVremeDostave,
@@ -49,9 +60,9 @@ class NarudzbinaController {
                 deoNarudzbine: deloviNarudzbine,
                 cena: cena
             });
-            nar.save();
+            yield nar.save();
             res.json("Uspesno ste kreirali zahtev za narudzbinom! Molimo sacekajte potvrdu konobara!");
-        };
+        });
         this.getNarudzbineForGost = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 let gost = req.body.gost;
@@ -87,6 +98,54 @@ class NarudzbinaController {
             }
             catch (err) {
                 console.log(err);
+            }
+        });
+        this.getTrenutneNarudzbine = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let rest = req.body.res;
+                let narudzbine = yield narudzbina_1.default.find({ restoran: rest, status: "naCekanju" });
+                res.json(narudzbine);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+        this.odbijNarudzbinu = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let narudzbina = req.body.narudzbina;
+                let nar = yield narudzbina_1.default.findOne({ id: narudzbina });
+                nar.status = "odbijena";
+                yield nar.save();
+                res.json("Uspeh");
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+        this.potvrdiNarudzbinu = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let narId = req.body.narId;
+                let minVreme = req.body.minVreme;
+                let maxVreme = req.body.maxVreme;
+                let narudzbina = yield narudzbina_1.default.findOne({ id: narId });
+                narudzbina.status = "potvrdjena";
+                narudzbina.minVremeDostave = minVreme;
+                narudzbina.maxVremeDostave = maxVreme;
+                yield narudzbina.save();
+                res.json("Uspeh");
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+        this.getJelo = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let jeloId = req.body.jeloId;
+                let jelo = yield jelo_1.default.findOne({ id: jeloId });
+                res.json(jelo);
+            }
+            catch (error) {
+                console.log(error);
             }
         });
     }

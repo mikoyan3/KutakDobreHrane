@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 let Narudzbina = new Schema({
+    id: {
+        type: Number
+    },
     restoran: {
         type: String
     },

@@ -1,6 +1,7 @@
 import { deoNarudzbine } from "./deoNarudzbine";
 
 export class narudzbina{
+    id: number;
     restoran: string;
     status: string;
     minVremeDostave: number;

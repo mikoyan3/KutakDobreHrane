@@ -197,4 +197,16 @@ export class RezervacijeController{
             console.log(error);
         }
     }
+
+    odbijDolazak = async(req, res) => {
+        try{
+            let rezId = req.body.rezId; 
+            let rezervacija = await Rezervacija.findOne({id: rezId});
+            rezervacija.status = "neostvarena";
+            await rezervacija.save();
+            res.json("Uspeh!");
+        } catch(error){
+            console.log(error);
+        }
+    }
 }

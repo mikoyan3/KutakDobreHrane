@@ -20,7 +20,7 @@ import { deoNarudzbineHelper } from "../models/deoNarudzbineHelper";
 const bcrypt = require('bcrypt');
 
 export class NarudzbinaController{
-    generisiNovuNarudzbinu = (req: express.Request, res: express.Response)=>{
+    generisiNovuNarudzbinu = async(req, res)=>{
         let delovi: deoNarudzbineHelper[] = req.body.delovi;
         let restoran = req.body.restoran;
         let status = "naCekanju";
@@ -39,8 +39,18 @@ export class NarudzbinaController{
             });
             deloviNarudzbine.push(dn);
             cena += deo.cena;
+        });
+        let maxId = 0;
+        await Narudzbina.find({}).then(rez=>{
+            rez.forEach(r=>{
+                if(r.id > maxId){
+                    maxId = r.id;
+                }
+            })
         })
+        maxId = maxId + 1;
         let nar = new narudzbina({
+            id: maxId,
             restoran: restoran,
             status: status,
             minVremeDostave: minVremeDostave,
@@ -50,7 +60,7 @@ export class NarudzbinaController{
             deoNarudzbine: deloviNarudzbine,
             cena: cena
         })
-        nar.save();
+        await nar.save();
         res.json("Uspesno ste kreirali zahtev za narudzbinom! Molimo sacekajte potvrdu konobara!")
     }
 
@@ -85,6 +95,55 @@ export class NarudzbinaController{
             res.json({aktuelne: aktuelne, arhivirane: arhivirane});
         } catch(err){
             console.log(err);
+        }
+    }
+
+    getTrenutneNarudzbine = async(req, res)=>{
+        try{
+            let rest = req.body.res;
+            let narudzbine = await Narudzbina.find({restoran: rest, status: "naCekanju"});
+            
+            res.json(narudzbine);
+        } catch (error){
+            console.log(error);
+        }
+    }
+
+    odbijNarudzbinu = async(req, res)=>{
+        try{
+            let narudzbina = req.body.narudzbina;
+            let nar = await Narudzbina.findOne({id: narudzbina});
+            nar.status = "odbijena";
+            await nar.save();
+            res.json("Uspeh");
+        } catch (error){
+            console.log(error);
+        }
+    }
+
+    potvrdiNarudzbinu = async(req, res)=>{
+        try{
+            let narId = req.body.narId;
+            let minVreme = req.body.minVreme;
+            let maxVreme = req.body.maxVreme;
+            let narudzbina = await Narudzbina.findOne({id: narId});
+            narudzbina.status = "potvrdjena"
+            narudzbina.minVremeDostave = minVreme;
+            narudzbina.maxVremeDostave = maxVreme;
+            await narudzbina.save();
+            res.json("Uspeh")
+        } catch (error){
+            console.log(error);
+        }
+    }
+
+    getJelo = async(req, res)=>{
+        try{
+            let jeloId = req.body.jeloId;
+            let jelo = await Jelo.findOne({id: jeloId});
+            res.json(jelo);
+        } catch (error){
+            console.log(error);
         }
     }
 }

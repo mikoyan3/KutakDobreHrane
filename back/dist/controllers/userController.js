@@ -41,6 +41,7 @@ const path = __importStar(require("path"));
 const gost_1 = __importDefault(require("../models/gost"));
 const konobar_1 = __importDefault(require("../models/konobar"));
 const admin_1 = __importDefault(require("../models/admin"));
+const rezervacija_1 = __importDefault(require("../models/rezervacija"));
 const gost_2 = __importDefault(require("../models/gost"));
 const bcrypt = require('bcrypt');
 class UserController {
@@ -290,6 +291,133 @@ class UserController {
                 }
             });
         };
+        this.getInfoForStatistics = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let konobar = req.body.konobar;
+                let restoran = req.body.restoran;
+                let rezervacije = yield rezervacija_1.default.find({ konobar: konobar });
+                let weeklyGosti = {
+                    'MON': 0,
+                    'TUE': 0,
+                    'WED': 0,
+                    'THU': 0,
+                    'FRI': 0,
+                    'SAT': 0,
+                    'SUN': 0
+                };
+                rezervacije.forEach(rez => {
+                    let datum = new Date(rez.datum);
+                    let brojGostiju = rez.brojGostiju;
+                    let danUNedelji = datum.getDay();
+                    let danString = '';
+                    switch (danUNedelji) {
+                        case 0:
+                            danString = 'SUN';
+                            break;
+                        case 1:
+                            danString = 'MON';
+                            break;
+                        case 2:
+                            danString = 'TUE';
+                            break;
+                        case 3:
+                            danString = 'WED';
+                            break;
+                        case 4:
+                            danString = 'THU';
+                            break;
+                        case 5:
+                            danString = 'FRI';
+                            break;
+                        case 6:
+                            danString = 'SAT';
+                            break;
+                        default:
+                            break;
+                    }
+                    weeklyGosti[danString] += brojGostiju;
+                });
+                let konobari = yield konobar_1.default.find({});
+                let gostiPoKonobaru = {};
+                konobari.forEach(kon => {
+                    gostiPoKonobaru[kon.username] = 0;
+                });
+                let allRezervacije = yield rezervacija_1.default.find({ restoran: restoran });
+                allRezervacije.forEach(rez => {
+                    let username = rez.konobar;
+                    let brojGostiju = rez.brojGostiju;
+                    gostiPoKonobaru[username] += brojGostiju;
+                });
+                let formatedGostiPoKonobaru = Object.keys(gostiPoKonobaru).map(username => {
+                    return { username: username, sumBrojGostiju: gostiPoKonobaru[username] };
+                });
+                let trenDatum = new Date();
+                trenDatum.setHours(trenDatum.getHours() + 2);
+                let dvegodine = new Date();
+                dvegodine.setHours(dvegodine.getHours() + 2);
+                dvegodine.setMonth(dvegodine.getMonth() - 24);
+                let rezerv = yield rezervacija_1.default.find({ restoran: restoran });
+                let rezervacijeZadnjeDveGodine = [];
+                rezerv.forEach(rez => {
+                    let datumrez = new Date(rez.datum);
+                    if (datumrez >= dvegodine) {
+                        rezervacijeZadnjeDveGodine.push(rez);
+                    }
+                });
+                let daniUNedelji = {
+                    'SUN': 0,
+                    'MON': 0,
+                    'TUE': 0,
+                    'WED': 0,
+                    'THU': 0,
+                    'FRI': 0,
+                    'SAT': 0
+                };
+                let daniAvg = {
+                    'MON': 0,
+                    'TUE': 0,
+                    'WED': 0,
+                    'THU': 0,
+                    'FRI': 0,
+                    'SAT': 0,
+                    'SUN': 0
+                };
+                rezervacijeZadnjeDveGodine.forEach(rez => {
+                    const dan = new Date(rez.datum).getDay();
+                    switch (dan) {
+                        case 0:
+                            daniUNedelji['SUN']++;
+                            break;
+                        case 1:
+                            daniUNedelji['MON']++;
+                            break;
+                        case 2:
+                            daniUNedelji['TUE']++;
+                            break;
+                        case 3:
+                            daniUNedelji['WED']++;
+                            break;
+                        case 4:
+                            daniUNedelji['THU']++;
+                            break;
+                        case 5:
+                            daniUNedelji['FRI']++;
+                            break;
+                        case 6:
+                            daniUNedelji['SAT']++;
+                            break;
+                    }
+                });
+                const konstantaZaDeljenje = 24 * 4.345;
+                Object.keys(daniUNedelji).forEach(dan => {
+                    daniAvg[dan] = daniUNedelji[dan] / konstantaZaDeljenje;
+                });
+                res.json({ dijagramKolona: weeklyGosti, dijagramPita: formatedGostiPoKonobaru, dijagramHistogram: daniAvg });
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
     }
     registerGost(req, res) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {

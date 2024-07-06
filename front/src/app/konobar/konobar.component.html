@@ -4,10 +4,26 @@
         <div class="buttons">
             <button (click)="profil()">Profil</button>
             <button (click)="rezervacije()">Rezervacije</button>
-            <button>Dostave</button>
-            <button>Statistika</button>
+            <button (click)="dostave()">Dostave</button>
+            <button (click)="statistika()">Statistika</button>
         </div>
     </header>
+    <section *ngIf="flagStatistika == true" class="statistics">
+        <div class="chart-container">
+            <h2 class="chart-title">Histogram Chart</h2>
+            <canvas #histogram></canvas>
+        </div>
+    
+        <div class="chart-container">
+            <h2 class="chart-title">Column Chart</h2>
+            <canvas #column></canvas>
+        </div>
+    
+        <div class="chart-container">
+            <h2 class="chart-title">Pie Chart</h2>
+            <canvas #pie></canvas>
+        </div>
+    </section>
     <section class="profile" *ngIf="flagProfil == true">
         <h2>Profil</h2>
         <div class="profile-info">
@@ -93,6 +109,46 @@
                     <td>{{ rezervacija.brojGostiju }}</td>
                     <td class="buttonDisplay">
                         <button (click)="potvrdiDolazak(rezervacija.id)">Potvrdi dolazak</button>
+                        <button (click)="odbijDolazak(rezervacija.id)">Potvrdi nedolazak</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section *ngIf="flagNarudzbine == true" class="restaurant-list">
+        <h2>Lista neobradjenih narudzbina</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Gost</th>
+                    <th>Datum</th>
+                    <th>Sastav narudzbine</th>
+                    <th>Akcija</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let narudzbina of narudzbine">
+                    <td>{{ narudzbina.gost }}</td>
+                    <td>{{ formatDate(narudzbina.datum) }}</td>
+                    <td>
+                        <ul>
+                            <li *ngFor="let deo of narudzbina.deoNarudzbine">
+                                <strong>Jelo: </strong> {{deo.jeloObjekat.naziv}}. <strong>Kolicina: </strong> {{ deo.kolicina }}
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="buttonDisplay">
+                        <button (click)="prikaziCheckBox()" *ngIf="checkBoxFlag == false">Potvrdi</button>
+                        <section *ngIf="checkBoxFlag == true">
+                            Procenjeno vreme dostave: <select [(ngModel)]="minvreme">
+                                <option [value]="20">20-30 minuta</option>
+                                <option [value]="30">30-40 minuta</option>
+                                <option [value]="50">50-60 minuta</option>
+                            </select>
+                            <button (click)="potvrdiNarudzbinu(narudzbina.id)">Potvrdi</button>
+                            <span style="color: red;">{{errorVreme}}</span>
+                        </section>
+                        <button (click)="odbijNarudzbinu(narudzbina.id)" *ngIf="checkBoxFlag == false">Odbij</button>
                     </td>
                 </tr>
             </tbody>

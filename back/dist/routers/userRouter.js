@@ -59,4 +59,5 @@ userRouter.route("/updateProfileGost/:username").put((req, res) => userControlle
 userRouter.route("/updatePictureGost").post(upload.single('file'), userController.updatePictureGost);
 userRouter.route("/updatePictureKonobar").post(upload.single('file'), userController.updatePictureKonobar);
 userRouter.route("/updateProfileKonobar/:username").put((req, res) => userController.updateProfileKonobar(req, res));
+userRouter.route("/getInfoForStatistics").post(upload.single('file'), userController.getInfoForStatistics);
 exports.default = userRouter;

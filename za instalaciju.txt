@@ -1,4 +1,10 @@
+BACK:
 npm install bcrypt
 npm install multer
 npm install express multer @types/express @types/multer
 npm install moment-timezone
+
+FRONT:
+npm install chart.js
+npm install --save-dev @types/chart.js
+npm install chart.js --save

@@ -201,6 +201,18 @@ class RezervacijeController {
                 console.log(error);
             }
         });
+        this.odbijDolazak = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                let rezId = req.body.rezId;
+                let rezervacija = yield rezervacija_1.default.findOne({ id: rezId });
+                rezervacija.status = "neostvarena";
+                yield rezervacija.save();
+                res.json("Uspeh!");
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
     }
 }
 exports.RezervacijeController = RezervacijeController;

@@ -1,0 +1,27 @@
+<div class="container">
+    <header>
+        <h1>Dobrodošli u sistem restorana</h1>
+        <div class="buttons">
+            <button (click)="profil()">Profil</button>
+            <button (click)="rezervacije()">Rezervacije</button>
+            <button (click)="dostave()">Dostave</button>
+            <button (click)="statistika()">Statistika</button>
+        </div>
+    </header>
+    <section class="statistics">
+        <div class="chart-container">
+            <h2 class="chart-title">Prosecan broj rezervacija po danu u poslednjih 2 godine</h2>
+            <canvas #histogram></canvas>
+        </div>
+    
+        <div class="chart-container">
+            <h2 class="chart-title">Broj vasih gostiju po danima</h2>
+            <canvas #column></canvas>
+        </div>
+    
+        <div class="chart-container">
+            <h2 class="chart-title">Broj gostiju po konobarima</h2>
+            <canvas #pie></canvas>
+        </div>
+    </section>
+</div>

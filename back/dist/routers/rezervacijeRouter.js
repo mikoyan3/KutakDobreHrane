@@ -17,4 +17,5 @@ rezervacijeRouter.route("/potvrdiRezervaciju").post((req, res) => rezervacijeCon
 rezervacijeRouter.route("/odbijRezervaciju").post((req, res) => rezervacijeController.odbijRezervaciju(req, res));
 rezervacijeRouter.route("/getRezervacijeZaPotvrdu").post((req, res) => rezervacijeController.getRezervacijeZaPotvrdu(req, res));
 rezervacijeRouter.route("/potvrdiDolazak").post((req, res) => rezervacijeController.potvrdiDolazak(req, res));
+rezervacijeRouter.route("/odbijDolazak").post((req, res) => rezervacijeController.odbijDolazak(req, res));
 exports.default = rezervacijeRouter;

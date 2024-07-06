@@ -88,7 +88,13 @@ export class RezervacijeService {
     let data = {
       rezId: rezId
     }
-
     return this.http.post<string>("http://localhost:4000/rezervacije/potvrdiDolazak", data)
+  }
+
+  odbijDolazak(rezId: number){
+    let data = {
+      rezId: rezId
+    }
+    return this.http.post<string>("http://localhost:4000/rezervacije/odbijDolazak", data)
   }
 }
