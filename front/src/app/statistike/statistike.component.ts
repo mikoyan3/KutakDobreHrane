@@ -24,7 +24,7 @@ export class StatistikeComponent implements OnInit{
   dijagramHistogram: any[] = [];
   constructor(private userService: UserService, private router: Router){}
   async ngOnInit(){
-    let usr = localStorage.getItem('ulogovan');
+    let usr = localStorage.getItem('konobarUlogovan');
     if(usr != null) this.korisnik = JSON.parse(usr);
     let povratna: any = await lastValueFrom(this.userService.getInfoForStatistics(this.korisnik.username, this.korisnik.restoran));
     this.dijagramHistogram = povratna.dijagramHistogram;

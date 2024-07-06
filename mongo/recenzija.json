@@ -1,32 +1,26 @@
 [
     {
         "restoran": "Restoran Pavle",
-	"rezervacijaId": 2,
+	"rezervacijaId": 1,
         "ocena": 5,
-        "komentar": "Amazing food and service!"
+        "komentar": "Odlicna hrana i usluga"
+    },
+    {
+        "restoran": "Restoran Pavle",
+	"rezervacijaId": 3,
+        "ocena": 4,
+        "komentar": "Sve je bilo vrlo dobro"
     },
     {
         "restoran": "Ilija's Bistro",
-	"rezervacijaId": 2,
-        "ocena": 4,
-        "komentar": "Great ambiance and tasty dishes."
-    },
-    {
-        "restoran": "Marko's Eatery",
-	"rezervacijaId": 3,
+	"rezervacijaId": 23,
         "ocena": 3,
-        "komentar": "Good food but a bit slow service."
+        "komentar": "Dosta toga mi se nije svidjalo"
     },
     {
-        "restoran": "The Test Diner",
-	"rezervacijaId": 4,
-        "ocena": 2,
-        "komentar": "Average food, needs improvement."
-    },
-    {
-        "restoran": "Fusion Delight",
-	"rezervacijaId": 5,
-        "ocena": 1,
-        "komentar": "Poor service and food quality."
+        "restoran": "Ilija's Bistro",
+	"rezervacijaId": 24,
+        "ocena": 4,
+        "komentar": "Ovog puta je bilo bolje nego proslog puta!"
     }
 ]

@@ -40,7 +40,7 @@ export class LayoutComponent implements OnInit {
       this.message = "";
       let rez = localStorage.getItem('rezervacija')
       if(rez != null) this.rezervacija = JSON.parse(rez);
-      let kon = localStorage.getItem('ulogovan');
+      let kon = localStorage.getItem('konobarUlogovan');
       if(kon != null) this.korisnik = JSON.parse(kon);
       let rezultat: any = await lastValueFrom(this.restoranService.getLayoutForRestoran(this.rezervacija))
       this.restoran = rezultat.restoran;

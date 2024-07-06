@@ -75,7 +75,7 @@
 	"status": "odobren"  
     },
     {
-        "username": "nikola",
+        "username": "nikola1",
         "password": "Nikola1!",
         "securityQuestion": "Koje je ime vaseg kucnog ljubimca?",
         "securityAnswer": "Luna",
@@ -84,7 +84,7 @@
         "gender": "m",
         "address": "Ulica Nikole 7",
         "phoneNumber": "0677777777",
-        "email": "nikola@mail.com",
+        "email": "nikola1@mail.com",
         "pictureUrl": "placeholder.jpg",
         "restoran": "Restoran Pavle",
 	"status": "odobren"  
@@ -103,5 +103,20 @@
         "pictureUrl": "placeholder.jpg",
         "restoran": "Marko's Eatery",
 	"status": "odobren"  
+    },
+    {
+        "username": "stefan1",
+        "password": "Stefan1!",
+        "securityQuestion": "Koje je ime vaseg kucnog ljubimca?",
+        "securityAnswer": "Max",
+        "name": "Stefan",
+        "surname": "Stefanovic",
+        "gender": "z",
+        "address": "Ulica Milene 8",
+        "phoneNumber": "0688888888",
+        "email": "stefan1@mail.com",
+        "pictureUrl": "placeholder.jpg",
+        "restoran": "The Test Diner",
+	"status": "deaktiviran"  
     }
 ]

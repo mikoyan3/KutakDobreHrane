@@ -168,7 +168,7 @@ class UserController {
             gost_1.default.findOne({ username: username }).then((kor) => __awaiter(this, void 0, void 0, function* () {
                 if (kor == null) {
                     konobar_1.default.findOne({ username: username }).then((kon) => __awaiter(this, void 0, void 0, function* () {
-                        if (kon == null) {
+                        if (kon == null || kon.status != "odobren") {
                             res.json({ message: "Korisnik ne postoji!", user: null });
                         }
                         else {
@@ -193,22 +193,27 @@ class UserController {
                     }));
                 }
                 else {
-                    const storedPassword = kor.password;
-                    let passwordMatch = false;
-                    if (storedPassword != null && (storedPassword.startsWith('$2b$') || storedPassword.startsWith('$2a$'))) {
-                        passwordMatch = yield bcrypt.compare(password, storedPassword);
+                    if (kor.status == "odobren") {
+                        const storedPassword = kor.password;
+                        let passwordMatch = false;
+                        if (storedPassword != null && (storedPassword.startsWith('$2b$') || storedPassword.startsWith('$2a$'))) {
+                            passwordMatch = yield bcrypt.compare(password, storedPassword);
+                        }
+                        else {
+                            passwordMatch = (password == storedPassword);
+                        }
+                        if (passwordMatch) { // ako se passwordi poklapaju
+                            const hashedPassword = yield bcrypt.hash(newPassword, 10);
+                            kor.password = hashedPassword;
+                            kor.save();
+                            res.json({ message: "Promenjena sifra", user: kor });
+                        }
+                        else { // ako se passwordi ne poklapaju
+                            res.json({ message: "Stari password nije odgovarajuci!", user: null });
+                        }
                     }
                     else {
-                        passwordMatch = (password == storedPassword);
-                    }
-                    if (passwordMatch) { // ako se passwordi poklapaju
-                        const hashedPassword = yield bcrypt.hash(newPassword, 10);
-                        kor.password = hashedPassword;
-                        kor.save();
-                        res.json({ message: "Promenjena sifra", user: kor });
-                    }
-                    else { // ako se passwordi ne poklapaju
-                        res.json({ message: "Stari password nije odgovarajuci!", user: null });
+                        res.json({ message: "Korisnik nije jos uvek odobren", user: null });
                     }
                 }
             })).catch(err => {
@@ -239,7 +244,7 @@ class UserController {
             gost_1.default.findOne({ username: username }).then((kor) => __awaiter(this, void 0, void 0, function* () {
                 if (kor == null) {
                     konobar_1.default.findOne({ username: username }).then((kon) => __awaiter(this, void 0, void 0, function* () {
-                        if (kon == null) {
+                        if (kon == null || kon.status != "odobren") {
                             res.json({ message: "Korisnik ne postoji!", user: null });
                         }
                         else {
@@ -251,10 +256,15 @@ class UserController {
                     }));
                 }
                 else {
-                    const hashedPassword = yield bcrypt.hash(newPassword, 10);
-                    kor.password = hashedPassword;
-                    kor.save();
-                    res.json({ message: "Promenjena sifra", user: kor });
+                    if (kor.status == "odobren") {
+                        const hashedPassword = yield bcrypt.hash(newPassword, 10);
+                        kor.password = hashedPassword;
+                        kor.save();
+                        res.json({ message: "Promenjena sifra", user: kor });
+                    }
+                    else {
+                        res.json({ message: "Korisnik nije aktivan", user: null });
+                    }
                 }
             })).catch(err => {
                 console.log(err);
@@ -347,7 +357,7 @@ class UserController {
                     }
                     weeklyGosti[danString] += brojGostiju;
                 });
-                let konobari = yield konobar_1.default.find({});
+                let konobari = yield konobar_1.default.find({ restoran: req.body.restoran });
                 let gostiPoKonobaru = {};
                 konobari.forEach(kon => {
                     gostiPoKonobaru[kon.username] = 0;

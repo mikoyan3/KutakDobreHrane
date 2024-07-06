@@ -33,44 +33,49 @@ restoranRouter.post('/upload-layout', upload.single('layout'), async(req, res)=>
     try{
         const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
         const restoranData = data.restoran;
-        let pocetak = req.body.pocetakRadnogVremena;
-        let kraj = req.body.krajRadnogVremena;
-        let radnoVreme = new radnoVremeRestorana({
-            restoran: req.body.naziv,
-            pocetak: pocetak,
-            kraj: kraj
-        });
-        await radnoVreme.save();
-        let restoran = new Restoran({
-            naziv: req.body.naziv,
-            adresa: req.body.adresa,
-            tip: req.body.tip,
-            telefon: req.body.telefon,
-            opis: req.body.opis,
-            kitchen: restoranData.kitchen,
-            toilets: restoranData.toilets
-        });
-        await restoran.save();
-
-        const stolovi = await Sto.find({});
-        let nextId = 0;
-        stolovi.forEach(sto=>{
-            if(sto.id > nextId){
-                nextId = sto.id;
-            }
-        })
-        nextId = nextId + 1;
-
-        const tablePromises = data.tables.map(table => {
-            return new Sto({
-                ...table,
+        const rest = await Restoran.findOne({naziv: req.body.naziv});
+        if(rest){
+            res.json("Desila se greska!");
+        } else {
+            let pocetak = req.body.pocetakRadnogVremena;
+            let kraj = req.body.krajRadnogVremena;
+            let radnoVreme = new radnoVremeRestorana({
                 restoran: req.body.naziv,
-                id: nextId++
-            }).save();
-        });
-        await Promise.all(tablePromises);
+                pocetak: pocetak,
+                kraj: kraj
+            });
+            await radnoVreme.save();
+            let restoran = new Restoran({
+                naziv: req.body.naziv,
+                adresa: req.body.adresa,
+                tip: req.body.tip,
+                telefon: req.body.telefon,
+                opis: req.body.opis,
+                kitchen: restoranData.kitchen,
+                toilets: restoranData.toilets
+            });
+            await restoran.save();
 
-        res.json("Uspesno dodat restoran")
+            const stolovi = await Sto.find({});
+            let nextId = 0;
+            stolovi.forEach(sto=>{
+                if(sto.id > nextId){
+                    nextId = sto.id;
+                }
+            })
+            nextId = nextId + 1;
+
+            const tablePromises = data.tables.map(table => {
+                return new Sto({
+                    ...table,
+                    restoran: req.body.naziv,
+                    id: nextId++
+                }).save();
+            });
+            await Promise.all(tablePromises);
+
+            res.json("Uspesno dodat restoran")
+        }
     } catch (error){
         console.error('Desila se greska');
         res.json("Desila se greska");

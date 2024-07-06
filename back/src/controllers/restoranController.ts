@@ -248,8 +248,8 @@ export class RestoranController{
         try{
             let rezervacija = req.body.rezervacija;
             let pocetakRezervacije = new Date(rezervacija.datum);
-            let donjaGranica = pocetakRezervacije;
-            let gornjaGranica = pocetakRezervacije;
+            let donjaGranica = new Date(rezervacija.datum);
+            let gornjaGranica = new Date(rezervacija.datum);
             donjaGranica.setHours(donjaGranica.getHours() - 3);
             if (donjaGranica.getHours() > pocetakRezervacije.getHours()) { //Ako odem u prethodni dan
                 donjaGranica.setDate(donjaGranica.getDate() - 1);

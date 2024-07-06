@@ -22,11 +22,11 @@ export class LoginComponent {
       this.userService.login(this.username, this.password, this.userRole).subscribe((rez: any)=>{
         if(rez.userType == "gost"){
           this.message = "";
-          localStorage.setItem('ulogovan', JSON.stringify(rez.user));
+          localStorage.setItem('gostUlogovan', JSON.stringify(rez.user));
           this.router.navigate(['gost']);
         } else if(rez.userType == "konobar"){
           this.message = "";
-          localStorage.setItem('ulogovan', JSON.stringify(rez.user));
+          localStorage.setItem('konobarUlogovan', JSON.stringify(rez.user));
           this.router.navigate(['konobar']);
         } else {
           this.message = rez.userType;

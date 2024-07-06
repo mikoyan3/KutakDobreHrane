@@ -20,7 +20,7 @@ export class LoginAdminComponent {
       this.userService.login_admin(this.username, this.password).subscribe((rez: any)=>{
         if(rez.message == "Uspesno"){
           this.message = "";
-          localStorage.setItem('ulogovan', JSON.stringify(rez.user));
+          localStorage.setItem('admin', JSON.stringify(rez.user));
           this.router.navigate(['adminDashboard']);
         } else {
           this.message = rez.message;

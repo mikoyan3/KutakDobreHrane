@@ -64,7 +64,7 @@ export class KonobarComponent implements OnInit{
       this.dostave();
     }
     localStorage.removeItem('flag');
-    let usr = localStorage.getItem('ulogovan');
+    let usr = localStorage.getItem('konobarUlogovan');
     if(usr != null) this.korisnik = JSON.parse(usr);
     this.ime = this.korisnik.name;
     this.prezime = this.korisnik.surname;
@@ -132,13 +132,13 @@ export class KonobarComponent implements OnInit{
     this.korisnik.phoneNumber = this.telefon;
     try{
       let rez = await lastValueFrom(this.userService.updateProfileKonobar(this.korisnik));
-      localStorage.removeItem('ulogovan')
-      localStorage.setItem('ulogovan', JSON.stringify(rez));
+      localStorage.removeItem('konobarUlogovan')
+      localStorage.setItem('konobarUlogovan', JSON.stringify(rez));
       this.successMessage = "Uspesno ste azurirali profil!"
       if(this.fileForUpload != null){
         let res = await lastValueFrom(this.userService.updatePictureKonobar(this.korisnik.username, this.fileForUpload))
-        localStorage.removeItem('ulogovan')
-        localStorage.setItem('ulogovan', JSON.stringify(res));
+        localStorage.removeItem('konobarUlogovan')
+        localStorage.setItem('konobarUlogovan', JSON.stringify(res));
         this.successMessage = "Uspesno ste azurirali profil!";
         let data = await lastValueFrom(this.userService.getFileKonobar(this.korisnik.username))
         const blob = new Blob([data]);

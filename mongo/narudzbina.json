@@ -2,7 +2,7 @@
     {	
         "id": 1,
         "restoran": "Restoran Pavle",
-        "status": "naCekanju",
+        "status": "potvrdjena",
         "minVremeDostave": 20,
 	"maxVremeDostave": 30,
 	"datum": "2024-06-19T12:00:00Z",
@@ -23,20 +23,20 @@
     },
     {	
         "id": 2,
-        "restoran": "Ilija's Bistro",
+        "restoran": "Marko's Eatery",
         "status": "potvrdjena",
         "minVremeDostave": 30,
 	"maxVremeDostave": 40,
 	"datum": "2024-06-19T12:00:00Z",
-	"gost": "marko",
+	"gost": "pavle",
         "deoNarudzbine": [
             {
-                "jelo": 2,
+                "jelo": 3,
                 "kolicina": 1,
-                "cena": 700
+                "cena": 600
             }
         ],
-        "cena": 700
+        "cena": 600
     },
     {	
         "id": 3,
@@ -45,7 +45,7 @@
         "minVremeDostave": 50,
 	"maxVremeDostave": 60,
 	"datum": "2024-06-19T12:00:00Z",
-	"gost": "test",
+	"gost": "pavle",
         "deoNarudzbine": [
             {
                 "jelo": 3,
@@ -58,7 +58,7 @@
     {	
         "id": 4,
         "restoran": "The Test Diner",
-        "status": "naCekanju",
+        "status": "potvrdjena",
         "minVremeDostave": 20,
 	"maxVremeDostave": 30,
 	"datum": "2024-06-19T12:00:00Z",
@@ -88,5 +88,22 @@
             }
         ],
         "cena": 1600
+    },
+    {	
+        "id": 6,
+        "restoran": "Marko's Eatery",
+        "status": "potvrdjena",
+        "minVremeDostave": 50,
+	"maxVremeDostave": 60,
+	"datum": "2024-06-19T12:00:00Z",
+	"gost": "pavle",
+        "deoNarudzbine": [
+            {
+                "jelo": 3,
+                "kolicina": 2,
+                "cena": 1200
+            }
+        ],
+        "cena": 1200
     }
 ]

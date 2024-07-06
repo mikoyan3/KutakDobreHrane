@@ -37,7 +37,7 @@ export class RestoranComponent implements OnInit{
   ngOnInit(): void {
     this.message = "";
     let rest = localStorage.getItem('restoran');
-    let usr = localStorage.getItem('ulogovan');
+    let usr = localStorage.getItem('gostUlogovan');
     if (usr != null) this.gost = JSON.parse(usr);
     this.restoranService.getRestoranWithNaziv(rest).subscribe(rez => {
       this.restoran = rez;

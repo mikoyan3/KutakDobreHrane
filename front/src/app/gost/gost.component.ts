@@ -8,6 +8,7 @@ import { rezervacija } from '../models/rezervacija';
 import { RezervacijeService } from '../services/rezervacije.service';
 import { DatePipe } from '@angular/common';
 import { NarudzbinaService } from '../services/narudzbina.service';
+import { last, lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-gost',
@@ -49,10 +50,10 @@ export class GostComponent implements OnInit{
   fail: string = '';
   constructor(private narudzbineService: NarudzbinaService,private datePipe: DatePipe, private userService: UserService, private sanitizer: DomSanitizer, private restoranService: RestoranService, private router: Router, private rezervacijeService: RezervacijeService){}
 
-  ngOnInit(): void {
+  async ngOnInit(){
     this.errorMessage = "";
     this.successMessage = "";
-    let usr = localStorage.getItem('ulogovan');
+    let usr = localStorage.getItem('gostUlogovan');
     if(usr != null) this.korisnik = JSON.parse(usr);
     this.ime = this.korisnik.name;
     this.prezime = this.korisnik.surname;
@@ -60,78 +61,80 @@ export class GostComponent implements OnInit{
     this.email = this.korisnik.email;
     this.telefon = this.korisnik.phoneNumber;
     this.kreditnaKartica = this.korisnik.creditCardNumber;
-    this.userService.getFileGost(this.korisnik.username).subscribe(data=>{
+    this.aktuelneNarudzbine = [];
+    this.aktuelneRezervacije = [];
+    this.arhiviraneRezervacije = [];
+    this.arhiviraneNarudzbine = [];
+    try{
+      let data = await lastValueFrom(this.userService.getFileGost(this.korisnik.username));
       const blob = new Blob([data]);
       const url = URL.createObjectURL(blob);
       this.fileDownloaded = this.sanitizer.bypassSecurityTrustUrl(url);
-      this.restoranService.getAllRestoraniWithRatings().subscribe(res=>{
-        this.restorani = res;
-        this.filteredRestorani = this.restorani;
-        this.userService.getAllKonobari().subscribe(kon=>{
-          this.konobari = kon;
-          this.rezervacijeService.getAktuelneRezervacije(this.korisnik.username).subscribe((rez: any)=>{
-            if(rez.message == "Nema aktuelnih rezervacija"){
-              this.aktuelneRezervacije = [];
-            } else {
-              rez.rezervacije.forEach(r=>{
-                rez.restorani.forEach(rst=>{
-                  if(r.restoran == rst.naziv){
-                    let newRez: rezervacija = new rezervacija();
-                    newRez.adresa = rst.adresa;
-                    newRez.brojGostiju = r.brojGostiju;
-                    newRez.datum = r.datum;
-                    newRez.gost = r.gost;
-                    newRez.id = r.id;
-                    newRez.komentarKonobara = r.komentarKonobara;
-                    newRez.opis = r.opis;
-                    newRez.restoran = rst.naziv;
-                    newRez.status = r.status;
-                    newRez.sto = r.sto;
-                    this.aktuelneRezervacije.push(newRez);
-                  }
-                })
-              })
+      let res = await lastValueFrom(this.restoranService.getAllRestoraniWithRatings());
+      this.restorani = res;
+      this.filteredRestorani = this.restorani;
+      let kon = await lastValueFrom(this.userService.getAllKonobari());
+      this.konobari = kon;
+      let rez: any = await lastValueFrom(this.rezervacijeService.getAktuelneRezervacije(this.korisnik.username));
+      if(rez.message == "Nema aktuelnih rezervacija"){
+        this.aktuelneRezervacije = [];
+      } else {
+        rez.rezervacije.forEach(r=>{
+          rez.restorani.forEach(rst=>{
+            if(r.restoran == rst.naziv){
+              let newRez: rezervacija = new rezervacija();
+              newRez.adresa = rst.adresa;
+              newRez.brojGostiju = r.brojGostiju;
+              newRez.datum = r.datum;
+              newRez.gost = r.gost;
+              newRez.id = r.id;
+              newRez.komentarKonobara = r.komentarKonobara;
+              newRez.opis = r.opis;
+              newRez.restoran = rst.naziv;
+              newRez.status = r.status;
+              newRez.sto = r.sto;
+              this.aktuelneRezervacije.push(newRez);
             }
-            this.rezervacijeService.getArhiviraneRezervacije(this.korisnik.username).subscribe((arh: any)=>{
-              if(arh.message == "Nema arhiviranih rezervacija!"){
-                this.arhiviraneRezervacije = [];
-              }else{
-                this.arhiviraneRezervacije = arh.rezervacije.map(rezervacija=>{
-                  let sto = arh.stolovi.find(sto=>sto.id === rezervacija.sto);
-                  let restoran = sto ? sto.restoran : '';
-                  let recenzija = arh.recenzije.find(rec => rec.rezervacijaId === rezervacija.id);
-                  let komentar = recenzija ? recenzija.komentar : '';
-                  let ocena = recenzija ? recenzija.ocena : 0;
-                  return{
-                    ...rezervacija,
-                    restoran: restoran,
-                    komentar: komentar,
-                    ocena: ocena
-                  };
-                });
-                this.arhiviraneRezervacije.forEach(arhivirana=>{
-                  if(!arhivirana.komentar){
-                    arhivirana.komentar = '';
-                  }
-                  if(!arhivirana.ocena){
-                    arhivirana.ocena = 0;
-                  }
-                })
-              }
-              this.narudzbineService.getNarudzbineForGost(this.korisnik.username).subscribe((nar: any)=>{
-                this.arhiviraneNarudzbine = nar.arhivirane;
-                this.aktuelneNarudzbine = nar.aktuelne;
-                this.arhiviraneNarudzbine.sort((a, b) => {
-                  let dateA = new Date(a.datum);
-                  let dateB = new Date(b.datum);
-                  return dateA.getTime() - dateB.getTime();
-              });
-              })
-            })
           })
+        });
+      }
+      let arh: any = await lastValueFrom(this.rezervacijeService.getArhiviraneRezervacije(this.korisnik.username));
+      if(arh.message == "Nema arhiviranih rezervacija!"){
+        this.arhiviraneRezervacije = [];
+      }else{
+        this.arhiviraneRezervacije = arh.rezervacije.map(rezervacija=>{
+          let sto = arh.stolovi.find(sto=>sto.id === rezervacija.sto);
+          let restoran = sto ? sto.restoran : '';
+          let recenzija = arh.recenzije.find(rec => rec.rezervacijaId === rezervacija.id);
+          let komentar = recenzija ? recenzija.komentar : '';
+          let ocena = recenzija ? recenzija.ocena : 0;
+          return{
+            ...rezervacija,
+            restoran: restoran,
+            komentar: komentar,
+            ocena: ocena
+          };
+        });
+        this.arhiviraneRezervacije.forEach(arhivirana=>{
+          if(!arhivirana.komentar){
+            arhivirana.komentar = '';
+          }
+          if(!arhivirana.ocena){
+            arhivirana.ocena = 0;
+          }
         })
-      })
-    })
+      }
+      let nar: any = await lastValueFrom(this.narudzbineService.getNarudzbineForGost(this.korisnik.username));
+      this.arhiviraneNarudzbine = nar.arhivirane;
+      this.aktuelneNarudzbine = nar.aktuelne;
+      this.arhiviraneNarudzbine.sort((a, b) => {
+        let dateA = new Date(a.datum);
+        let dateB = new Date(b.datum);
+        return dateA.getTime() - dateB.getTime();
+      });
+    } catch (error){  
+      console.log(error);
+    }
   }
 
   onFileSelected(event: any): void {
@@ -156,31 +159,31 @@ export class GostComponent implements OnInit{
     reader.readAsDataURL(file);
   }
 
-  updateProfile() {
+  async updateProfile() {
     this.korisnik.name = this.ime;
     this.korisnik.surname = this.prezime;
     this.korisnik.address = this.adresa;
     this.korisnik.email = this.email;
     this.korisnik.phoneNumber = this.telefon;
     this.korisnik.creditCardNumber = this.kreditnaKartica;
-  
-    this.userService.updateProfileGost(this.korisnik).subscribe(rez=>{
-      localStorage.removeItem('ulogovan')
-      localStorage.setItem('ulogovan', JSON.stringify(rez));
+    try{
+      let rez = await lastValueFrom(this.userService.updateProfileGost(this.korisnik));
+      localStorage.removeItem('gostUlogovan')
+      localStorage.setItem('gostUlogovan', JSON.stringify(rez));
       this.successMessage = "Uspesno ste azurirali profil!"
       if(this.fileForUpload != null){
-        this.userService.updatePictureGost(this.korisnik.username, this.fileForUpload).subscribe(res=>{
-          localStorage.removeItem('ulogovan')
-          localStorage.setItem('ulogovan', JSON.stringify(res));
-          this.successMessage = "Uspesno ste azurirali profil!"
-          this.userService.getFileGost(this.korisnik.username).subscribe(data=>{
-            const blob = new Blob([data]);
-            const url = URL.createObjectURL(blob);
-            this.fileDownloaded = this.sanitizer.bypassSecurityTrustUrl(url);
-          })
-        })
+        let res = await lastValueFrom(this.userService.updatePictureGost(this.korisnik.username, this.fileForUpload));
+        localStorage.removeItem('gostUlogovan')
+        localStorage.setItem('gostUlogovan', JSON.stringify(res));
+        this.successMessage = "Uspesno ste azurirali profil!";
+        let data = await lastValueFrom(this.userService.getFileGost(this.korisnik.username));
+        const blob = new Blob([data]);
+        const url = URL.createObjectURL(blob);
+        this.fileDownloaded = this.sanitizer.bypassSecurityTrustUrl(url);
       }
-    })
+    } catch(error){
+      console.log(error);
+    }
   }
   
   profil(){
@@ -264,14 +267,18 @@ export class GostComponent implements OnInit{
     return num < 10 ? '0' + num : num.toString();
   }
 
-  otkaziRezervaciju(id: number){
-    this.rezervacijeService.otkaziRezervaciju(id).subscribe(rez=>{
+  async otkaziRezervaciju(id: number){
+    try{
+      let rez = await lastValueFrom(this.rezervacijeService.otkaziRezervaciju(id));
       this.ngOnInit();
-    })
+    } catch (error){
+      console.log(error)
+    }
   }
 
-  submitReview(): void{
-    this.rezervacijeService.ostaviRecenziju(this.reviewFormId, this.noviKomentar, this.rating, this.reviewFormRestoran).subscribe(rez=>{
+  async submitReview(){
+    try{
+      let rez = await lastValueFrom(this.rezervacijeService.ostaviRecenziju(this.reviewFormId, this.noviKomentar, this.rating, this.reviewFormRestoran));
       if(rez == "Uspesno ste ostavili recenziju!"){
         this.fail = "";
         this.success = rez;
@@ -282,7 +289,10 @@ export class GostComponent implements OnInit{
       this.reviewFormId = null;
       this.noviKomentar = '';
       this.rating = 0;
-    })
+      this.ngOnInit();
+    } catch(error){
+      console.log(error)
+    }
   }
 
   openReviewForm(reservation: rezervacija): void {

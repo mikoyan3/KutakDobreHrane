@@ -217,7 +217,7 @@ export class UserController{
         Gost.findOne({username: username}).then(async kor=>{
             if(kor == null){
                 Konobar.findOne({username: username}).then(async kon=>{
-                    if(kon == null){
+                    if(kon == null || kon.status != "odobren"){
                         res.json({message: "Korisnik ne postoji!", user: null});
                     } else {
                         const storedPassword = kon.password;
@@ -238,20 +238,24 @@ export class UserController{
                     }
                 })
             } else {
-                const storedPassword = kor.password;
-                let passwordMatch = false;
-                if(storedPassword != null && (storedPassword.startsWith('$2b$') || storedPassword.startsWith('$2a$'))){
-                    passwordMatch = await bcrypt.compare(password, storedPassword);
+                if(kor.status == "odobren"){
+                    const storedPassword = kor.password;
+                    let passwordMatch = false;
+                    if(storedPassword != null && (storedPassword.startsWith('$2b$') || storedPassword.startsWith('$2a$'))){
+                        passwordMatch = await bcrypt.compare(password, storedPassword);
+                    } else {
+                        passwordMatch = (password == storedPassword);
+                    }
+                    if(passwordMatch){ // ako se passwordi poklapaju
+                        const hashedPassword = await bcrypt.hash(newPassword, 10);
+                        kor.password = hashedPassword;
+                        kor.save();
+                        res.json({message: "Promenjena sifra", user: kor});
+                    } else{ // ako se passwordi ne poklapaju
+                        res.json({message: "Stari password nije odgovarajuci!", user:null});
+                    }
                 } else {
-                    passwordMatch = (password == storedPassword);
-                }
-                if(passwordMatch){ // ako se passwordi poklapaju
-                    const hashedPassword = await bcrypt.hash(newPassword, 10);
-                    kor.password = hashedPassword;
-                    kor.save();
-                    res.json({message: "Promenjena sifra", user: kor});
-                } else{ // ako se passwordi ne poklapaju
-                    res.json({message: "Stari password nije odgovarajuci!", user:null});
+                    res.json({message: "Korisnik nije jos uvek odobren", user: null});
                 }
             }
         }).catch(err=>{
@@ -282,7 +286,7 @@ export class UserController{
         Gost.findOne({username: username}).then(async kor=>{
             if(kor == null){
                 Konobar.findOne({username: username}).then(async kon=>{
-                    if(kon == null){
+                    if(kon == null || kon.status != "odobren"){
                         res.json({message: "Korisnik ne postoji!", user: null});
                     } else {
                         const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -292,10 +296,14 @@ export class UserController{
                     }
                 })
             } else {
-                const hashedPassword = await bcrypt.hash(newPassword, 10);
-                kor.password = hashedPassword;
-                kor.save();
-                res.json({message: "Promenjena sifra", user: kor});
+                if(kor.status == "odobren"){
+                    const hashedPassword = await bcrypt.hash(newPassword, 10);
+                    kor.password = hashedPassword;
+                    kor.save();
+                    res.json({message: "Promenjena sifra", user: kor});
+                } else {
+                    res.json({message: "Korisnik nije aktivan", user: null});
+                }
             }
         }).catch(err=>{
             console.log(err);
@@ -414,11 +422,12 @@ export class UserController{
                 weeklyGosti[danString] += brojGostiju;
             })
             
-            let konobari = await Konobar.find({});
+            let konobari = await Konobar.find({restoran: req.body.restoran});
             let gostiPoKonobaru = {};
             konobari.forEach(kon=>{
                 gostiPoKonobaru[kon.username] = 0;
             })
+            
             let allRezervacije = await Rezervacija.find({restoran: restoran})
             allRezervacije.forEach(rez=>{
                 let username = rez.konobar;
